@@ -1,14 +1,14 @@
 /* ============================================
    UniFlow – Calcolatore Media Universitaria
-   Script definitivo e ottimizzato
+   Script definitivo e compatibile
 ============================================ */
 
-// Aggiunge una nuova riga (esame)
+// Aggiunge una nuova riga di input
 function addExam() {
   const container = document.getElementById("exam-list");
 
   const row = document.createElement("div");
-  row.className = "uf-exam-row";
+  row.classList.add("uf-exam-row");
 
   row.innerHTML = `
     <input type="number" class="voto" placeholder="Voto (18-30)" min="18" max="30">
@@ -29,37 +29,36 @@ function removeExam(button) {
 // Ricalcola ogni volta che l’utente scrive
 document.addEventListener("input", calculateMedia);
 
-// Calcolo della media
+// Funzione principale
 function calculateMedia() {
-  const voti = [...document.querySelectorAll(".voto")].map(v => Number(v.value));
-  const cfu = [...document.querySelectorAll(".cfu")].map(c => Number(c.value));
+  const votiInputs = document.querySelectorAll(".voto");
+  const cfuInputs = document.querySelectorAll(".cfu");
 
   let totaleCFU = 0;
   let sommaPonderata = 0;
 
-  for (let i = 0; i < voti.length; i++) {
-    const voto = voti[i];
-    const crediti = cfu[i];
+  votiInputs.forEach((votoInput, index) => {
+    const voto = Number(votoInput.value);
+    const crediti = Number(cfuInputs[index].value);
 
-    // Validazione semplice
     if (voto >= 18 && voto <= 30 && crediti > 0) {
       totaleCFU += crediti;
       sommaPonderata += voto * crediti;
     }
-  }
+  });
 
-  // Nessun dato valido → reset
+  const mediaValue = document.getElementById("media-value");
+  const media110Value = document.getElementById("media-110");
+
   if (totaleCFU === 0) {
-    document.getElementById("media-value").textContent = "—";
-    document.getElementById("media-110").textContent = "—";
+    mediaValue.textContent = "—";
+    media110Value.textContent = "—";
     return;
   }
 
-  // Calcoli
   const media = sommaPonderata / totaleCFU;
   const media110 = (media * 110) / 30;
 
-  // Output
-  document.getElementById("media-value").textContent = media.toFixed(2);
-  document.getElementById("media-110").textContent = media110.toFixed(2);
+  mediaValue.textContent = media.toFixed(2);
+  media110Value.textContent = media110.toFixed(2);
 }
