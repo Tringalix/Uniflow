@@ -29,6 +29,7 @@
 
       <div class="uf-header-actions">
         <button type="button" class="btn-mini" onclick="toggleFocus()">Focus</button>
+        <button type="button" class="btn-mini" onclick="toggleSidebar()">Stats</button>
         <button type="button" class="btn-mini" onclick="toggleTheme()">Tema</button>
       </div>
     </div>
@@ -50,12 +51,14 @@
           <span>Sessione estiva tra:</span>
           <strong id="session-countdown">—</strong>
         </div>
+
+        <p id="xp-label" class="uf-xp-label">+0 oggi · Inizia a farmare 👀</p>
       </div>
 
       <div class="uf-hero-visual">
         <div class="uf-card uf-card-glow">
-          <h3>XP Sessione</h3>
-          <p id="xp-label">+0 oggi · Inizia a farmare 👀</p>
+          <h3>UniFlow Stats</h3>
+          <p>Livello <span id="uf-level">1</span> · XP totali <span id="uf-xp-total">0</span></p>
         </div>
       </div>
     </div>
@@ -146,7 +149,7 @@
       <div class="uf-media-box uf-laurea-box">
         <div class="uf-laurea-grid">
           <div>
-            <label>Media in 110 (auto)</label>
+            <label>Media in 110 (auto/modificabile)</label>
             <input type="number" id="laurea-media110" placeholder="Es. 102" min="0" max="110">
           </div>
           <div>
@@ -246,6 +249,23 @@
       </div>
     </div>
   </footer>
+
+  <!-- SIDEBAR STATS -->
+  <div id="uf-sidebar" class="uf-sidebar">
+    <div class="uf-sidebar-inner">
+      <h3>Statistiche UniFlow</h3>
+      <p><strong>Livello:</strong> <span id="uf-side-level">1</span></p>
+      <p><strong>XP totale:</strong> <span id="uf-side-xp">0</span></p>
+      <p><strong>Media attuale:</strong> <span id="uf-side-media">—</span></p>
+      <p><strong>Media in 110:</strong> <span id="uf-side-media110">—</span></p>
+      <p><strong>Esami inseriti:</strong> <span id="uf-side-exams">0</span></p>
+
+      <h4>Obiettivi giornalieri</h4>
+      <ul id="uf-goals" class="uf-goals-list"></ul>
+
+      <button type="button" class="btn-mini" onclick="toggleSidebar()">Chiudi</button>
+    </div>
+  </div>
 
   <!-- TOAST -->
   <div id="uf-toast" class="uf-toast"></div>
