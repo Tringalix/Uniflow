@@ -59,6 +59,7 @@
       </div>
 
       <div class="uf-grid uf-grid-3">
+
         <div class="uf-tool-card">
           <h3>Calcolatore Media</h3>
           <p>La tua media ponderata in tempo reale.</p>
@@ -72,4 +73,70 @@
         </div>
 
         <div class="uf-tool-card">
-          <h3>Flashcard Automatiche
+          <h3>Flashcard Automatiche</h3>
+          <p>Studia senza sbatti.</p>
+          <button class="btn-mini" disabled>In arrivo</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CALCOLATORE MEDIA -->
+  <section id="media" class="uf-section">
+    <div class="uf-container">
+      <div class="uf-section-head">
+        <h2>Calcolatore Media Universitaria</h2>
+        <p>Inserisci i tuoi esami, i voti e i CFU. La media viene calcolata automaticamente.</p>
+      </div>
+
+      <div class="uf-media-box">
+        <div id="exam-list" class="uf-exam-list"></div>
+
+        <button class="btn-primary uf-add-exam" onclick="addExam()">+ Aggiungi esame</button>
+
+        <div class="uf-media-result">
+          <h3>Media ponderata</h3>
+          <p id="media-value">—</p>
+
+          <h3>Media in 110</h3>
+          <p id="media-110">—</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PREMIUM -->
+  <section id="premium" class="uf-section uf-premium">
+    <div class="uf-container uf-premium-inner">
+      <div>
+        <h2>UniFlow Premium</h2>
+        <p>Livello PRO: quando vuoi smettere di sopravvivere e iniziare a dominare.</p>
+        <ul class="uf-premium-list">
+          <li>Piani di studio personalizzati</li>
+          <li>Risultati avanzati dei test</li>
+          <li>Flashcard illimitate</li>
+          <li>Zero pubblicità</li>
+        </ul>
+      </div>
+
+      <div class="uf-premium-cta">
+        <p>A partire da <strong>4,99€/mese</strong></p>
+        <a href="#" class="btn-primary btn-full">Passa a Premium</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="uf-footer">
+    <div class="uf-container uf-footer-inner">
+      <div class="uf-footer-brand">
+        <span class="uf-logo-gradient">UniFlow</span>
+        <p>Il tuo alleato digitale per sopravvivere all’università con stile.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
