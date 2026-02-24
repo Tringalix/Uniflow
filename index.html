@@ -4,41 +4,131 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UniFlow – Il tuo flow universitario</title>
+
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* LOGIN OVERLAY SICURO */
+    .uf-login-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s ease;
+    }
+
+    .uf-visible {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+
+    .uf-hidden {
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+
+    .uf-login-box {
+      background: #111;
+      padding: 30px;
+      border-radius: 14px;
+      width: 320px;
+      text-align: center;
+    }
+
+    .uf-login-box input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: none;
+      background: #222;
+      color: white;
+    }
+
+    .uf-login-switch a {
+      color: #8ab4ff;
+      cursor: pointer;
+    }
+
+    /* RIASSUNTI AI */
+    .uf-textarea {
+      width: 100%;
+      height: 180px;
+      padding: 15px;
+      border-radius: 12px;
+      background: #111;
+      color: white;
+      border: 1px solid #333;
+      resize: vertical;
+      font-size: 15px;
+    }
+
+    .uf-summary-output h3 {
+      margin-top: 20px;
+    }
+
+    .uf-summary-output ul {
+      padding-left: 20px;
+      margin-top: 10px;
+    }
+
+    /* TOAST */
+    #uf-toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #222;
+      padding: 10px 20px;
+      border-radius: 20px;
+      opacity: 0;
+      transition: .2s;
+      z-index: 1000000;
+    }
+
+    #uf-toast.visible {
+      opacity: 1;
+    }
+  </style>
 </head>
 
 <body class="theme-dark">
 
- <!-- LOGIN -->
-<div id="uf-login-screen" class="uf-login-overlay uf-visible">
-  <div class="uf-login-box">
-    <h2>Accedi a UniFlow</h2>
-    <input type="email" id="login-email" placeholder="Email">
-    <input type="password" id="login-password" placeholder="Password">
-    <button class="btn-primary" onclick="login()">Accedi</button>
-    <p class="uf-login-switch">
-      Non hai un account?
-      <a href="#" onclick="showRegister()">Registrati</a>
-    </p>
+  <!-- LOGIN -->
+  <div id="uf-login-screen" class="uf-login-overlay uf-visible">
+    <div class="uf-login-box">
+      <h2>Accedi a UniFlow</h2>
+      <input type="email" id="login-email" placeholder="Email">
+      <input type="password" id="login-password" placeholder="Password">
+      <button class="btn-primary" onclick="login()">Accedi</button>
+      <p class="uf-login-switch">
+        Non hai un account?
+        <a onclick="showRegister()">Registrati</a>
+      </p>
+    </div>
   </div>
-</div>
 
-<!-- REGISTER -->
-<div id="uf-register-screen" class="uf-login-overlay uf-hidden">
-  <div class="uf-login-box">
-    <h2>Crea un account</h2>
-    <input type="email" id="register-email" placeholder="Email">
-    <input type="password" id="register-password" placeholder="Password">
-    <button class="btn-primary" onclick="register()">Registrati</button>
-    <p class="uf-login-switch">
-      Hai già un account?
-      <a href="#" onclick="showLogin()">Accedi</a>
-    </p>
+  <!-- REGISTER -->
+  <div id="uf-register-screen" class="uf-login-overlay uf-hidden">
+    <div class="uf-login-box">
+      <h2>Crea un account</h2>
+      <input type="email" id="register-email" placeholder="Email">
+      <input type="password" id="register-password" placeholder="Password">
+      <button class="btn-primary" onclick="register()">Registrati</button>
+      <p class="uf-login-switch">
+        Hai già un account?
+        <a onclick="showLogin()">Accedi</a>
+      </p>
+    </div>
   </div>
-</div>
 
   <!-- HEADER -->
   <header class="uf-header">
@@ -264,7 +354,7 @@
 
         <button class="btn-primary" onclick="generateSummary()">Genera Riassunto</button>
 
-        <div id="summary-output" class="uf-summary-output hidden">
+        <div id="summary-output" class="uf-summary-output uf-hidden">
           <h3>Riassunto breve</h3>
           <p id="summary-short">—</p>
 
@@ -299,7 +389,7 @@
   </div>
 
   <!-- TOAST -->
-  <div id="uf-toast" class="uf-toast"></div>
+  <div id="uf-toast"></div>
 
   <script>
     function toast(msg) {
@@ -310,13 +400,19 @@
     }
 
     function showLogin() {
-      document.getElementById("uf-login-screen").classList.remove("hidden");
-      document.getElementById("uf-register-screen").classList.add("hidden");
+      document.getElementById("uf-login-screen").classList.add("uf-visible");
+      document.getElementById("uf-login-screen").classList.remove("uf-hidden");
+
+      document.getElementById("uf-register-screen").classList.add("uf-hidden");
+      document.getElementById("uf-register-screen").classList.remove("uf-visible");
     }
 
     function showRegister() {
-      document.getElementById("uf-login-screen").classList.add("hidden");
-      document.getElementById("uf-register-screen").classList.remove("hidden");
+      document.getElementById("uf-register-screen").classList.add("uf-visible");
+      document.getElementById("uf-register-screen").classList.remove("uf-hidden");
+
+      document.getElementById("uf-login-screen").classList.add("uf-hidden");
+      document.getElementById("uf-login-screen").classList.remove("uf-visible");
     }
 
     function register() {
@@ -347,8 +443,11 @@
 
       toast("Login effettuato");
 
-      document.getElementById("uf-login-screen").classList.add("hidden");
-      document.getElementById("uf-register-screen").classList.add("hidden");
+      document.getElementById("uf-login-screen").classList.add("uf-hidden");
+      document.getElementById("uf-login-screen").classList.remove("uf-visible");
+
+      document.getElementById("uf-register-screen").classList.add("uf-hidden");
+      document.getElementById("uf-register-screen").classList.remove("uf-visible");
     }
 
     function logout() {
@@ -362,34 +461,4 @@
       const short = text.length > 200 ? text.slice(0, 200) + "..." : text;
       const long  = text.length > 600 ? text.slice(0, 600) + "..." : text;
 
-      const sentences = text.split(/[.!?]/).filter(s => s.trim().length > 0);
-      const points = sentences.slice(0, 5);
-      const questions = points.map(p => "Cosa significa: " + p.trim() + "?");
-
-      document.getElementById("summary-short").textContent = short;
-      document.getElementById("summary-long").textContent  = long;
-
-      const ulPoints = document.getElementById("summary-points");
-      ulPoints.innerHTML = "";
-      points.forEach(p => {
-        const li = document.createElement("li");
-        li.textContent = p.trim();
-        ulPoints.appendChild(li);
-      });
-
-      const ulQ = document.getElementById("summary-questions");
-      ulQ.innerHTML = "";
-      questions.forEach(q => {
-        const li = document.createElement("li");
-        li.textContent = q;
-        ulQ.appendChild(li);
-      });
-
-      document.getElementById("summary-output").classList.remove("hidden");
-      toast("Riassunto generato");
-    }
-  </script>
-
-  <script src="script.js"></script>
-</body>
-</html>
+      const sentences
