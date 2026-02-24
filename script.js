@@ -1,8 +1,9 @@
 /* ============================================
    UniFlow – Calcolatore Media Universitaria
-   Script riscritto da zero
+   Script definitivo e ottimizzato
 ============================================ */
 
+// Aggiunge una nuova riga (esame)
 function addExam() {
   const container = document.getElementById("exam-list");
 
@@ -10,22 +11,25 @@ function addExam() {
   row.className = "uf-exam-row";
 
   row.innerHTML = `
-    <input type="number" placeholder="Voto (18-30)" class="voto" min="18" max="30">
-    <input type="number" placeholder="CFU" class="cfu" min="1">
-    <button onclick="removeExam(this)">✕</button>
+    <input type="number" class="voto" placeholder="Voto (18-30)" min="18" max="30">
+    <input type="number" class="cfu" placeholder="CFU" min="1">
+    <button class="remove-btn" onclick="removeExam(this)">✕</button>
   `;
 
   container.appendChild(row);
   calculateMedia();
 }
 
-function removeExam(btn) {
-  btn.parentElement.remove();
+// Rimuove una riga
+function removeExam(button) {
+  button.parentElement.remove();
   calculateMedia();
 }
 
+// Ricalcola ogni volta che l’utente scrive
 document.addEventListener("input", calculateMedia);
 
+// Calcolo della media
 function calculateMedia() {
   const voti = [...document.querySelectorAll(".voto")].map(v => Number(v.value));
   const cfu = [...document.querySelectorAll(".cfu")].map(c => Number(c.value));
@@ -37,21 +41,25 @@ function calculateMedia() {
     const voto = voti[i];
     const crediti = cfu[i];
 
+    // Validazione semplice
     if (voto >= 18 && voto <= 30 && crediti > 0) {
       totaleCFU += crediti;
       sommaPonderata += voto * crediti;
     }
   }
 
+  // Nessun dato valido → reset
   if (totaleCFU === 0) {
     document.getElementById("media-value").textContent = "—";
     document.getElementById("media-110").textContent = "—";
     return;
   }
 
+  // Calcoli
   const media = sommaPonderata / totaleCFU;
   const media110 = (media * 110) / 30;
 
+  // Output
   document.getElementById("media-value").textContent = media.toFixed(2);
   document.getElementById("media-110").textContent = media110.toFixed(2);
 }
