@@ -2,17 +2,43 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Login Test</title>
+  <title>UniFlow</title>
   <style>
-    body { font-family: Arial; background:#0d0d0d; color:white; margin:0; }
-    .screen { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:#000000aa; }
+    body { font-family: system-ui; background:#050509; color:white; margin:0; }
     .hidden { display:none; }
-    .box { background:#111; padding:25px; border-radius:12px; width:300px; }
-    input { width:100%; padding:10px; margin:8px 0; border-radius:8px; border:none; background:#222; color:white; }
-    button { width:100%; padding:10px; border:none; border-radius:8px; background:#4f46e5; color:white; cursor:pointer; margin-top:10px; }
+
+    /* LOGIN UI */
+    .screen {
+      position:fixed; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      background:#000000aa;
+    }
+    .box {
+      background:#111; padding:25px; border-radius:12px; width:320px;
+    }
+    input {
+      width:100%; padding:10px; margin:8px 0;
+      border:none; border-radius:8px; background:#222; color:white;
+    }
+    button {
+      width:100%; padding:10px; margin-top:10px;
+      border:none; border-radius:8px; background:#4f46e5; color:white; cursor:pointer;
+    }
     a { color:#8ab4ff; cursor:pointer; }
-    #toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#222; padding:10px 20px; border-radius:20px; opacity:0; transition:.2s; }
+
+    /* TOAST */
+    #toast {
+      position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+      background:#222; padding:10px 20px; border-radius:20px;
+      opacity:0; transition:.2s;
+    }
     #toast.visible { opacity:1; }
+
+    /* APP */
+    #app { padding:20px; }
+    .uf-exam-row { display:flex; gap:10px; margin-bottom:10px; }
+    .uf-exam-row input { flex:1; }
+    .uf-exam-row button { width:40px; background:#e11d48; }
   </style>
 </head>
 <body>
@@ -45,9 +71,24 @@
     </div>
   </div>
 
+  <!-- APP (UniFlow) -->
+  <div id="app" class="hidden">
+    <h1>UniFlow</h1>
+
+    <h2>Calcolatore Media</h2>
+    <div id="exam-list"></div>
+    <button onclick="addExam()">Aggiungi esame</button>
+
+    <p>Media: <span id="media-value">—</span></p>
+    <p>Media /110: <span id="media-110">—</span></p>
+
+    <button onclick="logout()" style="background:#e11d48;margin-top:20px;">Logout</button>
+  </div>
+
   <div id="toast"></div>
 
   <script>
+    /* TOAST */
     function toast(msg) {
       const t = document.getElementById("toast");
       t.textContent = msg;
@@ -55,31 +96,29 @@
       setTimeout(() => t.classList.remove("visible"), 2000);
     }
 
+    /* LOGIN UI */
     function showLogin() {
       document.getElementById("login-screen").classList.remove("hidden");
       document.getElementById("register-screen").classList.add("hidden");
+      document.getElementById("app").classList.add("hidden");
     }
 
     function showRegister() {
       document.getElementById("login-screen").classList.add("hidden");
       document.getElementById("register-screen").classList.remove("hidden");
+      document.getElementById("app").classList.add("hidden");
     }
 
+    /* REGISTER */
     function register() {
       const email = document.getElementById("register-email").value.trim();
       const pass  = document.getElementById("register-password").value.trim();
 
-      if (!email || !pass) {
-        toast("Compila tutto");
-        return;
-      }
+      if (!email || !pass) return toast("Compila tutto");
 
       const users = JSON.parse(localStorage.getItem("users") || "{}");
 
-      if (users[email]) {
-        toast("Email già registrata");
-        return;
-      }
+      if (users[email]) return toast("Email già registrata");
 
       users[email] = { password: pass };
       localStorage.setItem("users", JSON.stringify(users));
@@ -88,19 +127,94 @@
       showLogin();
     }
 
+    /* LOGIN */
     function login() {
       const email = document.getElementById("login-email").value.trim();
       const pass  = document.getElementById("login-password").value.trim();
 
       const users = JSON.parse(localStorage.getItem("users") || "{}");
 
-      if (!users[email] || users[email].password !== pass) {
-        toast("Credenziali errate");
-        return;
-      }
+      if (!users[email] || users[email].password !== pass)
+        return toast("Credenziali errate");
 
       toast("Login effettuato");
-      // qui puoi nascondere tutto e mostrare la tua app
+
+      document.getElementById("login-screen").classList.add("hidden");
+      document.getElementById("register-screen").classList.add("hidden");
+      document.getElementById("app").classList.remove("hidden");
+
+      loadData();
+      calculateMedia();
+    }
+
+    /* LOGOUT */
+    function logout() {
+      showLogin();
+    }
+
+    /* UNIFLOW — MEDIA */
+    function addExam(voto = "", cfu = "") {
+      const list = document.getElementById("exam-list");
+
+      const row = document.createElement("div");
+      row.classList.add("uf-exam-row");
+
+      row.innerHTML = `
+        <input type="number" class="voto" placeholder="Voto" value="${voto}">
+        <input type="number" class="cfu" placeholder="CFU" value="${cfu}">
+        <button onclick="removeExam(this)">✕</button>
+      `;
+
+      list.appendChild(row);
+      calculateMedia();
+      saveData();
+    }
+
+    function removeExam(btn) {
+      btn.parentElement.remove();
+      calculateMedia();
+      saveData();
+    }
+
+    document.addEventListener("input", () => {
+      calculateMedia();
+      saveData();
+    });
+
+    function calculateMedia() {
+      const rows = [...document.querySelectorAll(".uf-exam-row")];
+      let somma = 0;
+      let totCFU = 0;
+
+      rows.forEach(r => {
+        const v = Number(r.querySelector(".voto").value);
+        const c = Number(r.querySelector(".cfu").value);
+        if (v >= 18 && v <= 30 && c > 0) {
+          somma += v * c;
+          totCFU += c;
+        }
+      });
+
+      const media = totCFU ? somma / totCFU : null;
+      const media110 = media ? (media * 110) / 30 : null;
+
+      document.getElementById("media-value").textContent = media ? media.toFixed(2) : "—";
+      document.getElementById("media-110").textContent = media110 ? media110.toFixed(2) : "—";
+    }
+
+    function saveData() {
+      const rows = [...document.querySelectorAll(".uf-exam-row")];
+      const data = rows.map(r => ({
+        voto: r.querySelector(".voto").value,
+        cfu: r.querySelector(".cfu").value
+      }));
+      localStorage.setItem("uniflow_esami", JSON.stringify(data));
+    }
+
+    function loadData() {
+      const data = JSON.parse(localStorage.getItem("uniflow_esami") || "[]");
+      document.getElementById("exam-list").innerHTML = "";
+      data.forEach(e => addExam(e.voto, e.cfu));
     }
   </script>
 
