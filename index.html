@@ -12,6 +12,39 @@
 
 <body class="theme-dark">
 
+  <!-- LOGIN / REGISTER -->
+  <div id="uf-login-screen" class="uf-login-screen">
+    <div class="uf-login-box">
+      <h2>Accedi a UniFlow</h2>
+
+      <input type="email" id="login-email" placeholder="Email">
+      <input type="password" id="login-password" placeholder="Password">
+
+      <button class="btn-primary" onclick="login()">Accedi</button>
+
+      <p class="uf-login-switch">
+        Non hai un account?
+        <a href="#" onclick="showRegister()">Registrati</a>
+      </p>
+    </div>
+  </div>
+
+  <div id="uf-register-screen" class="uf-login-screen hidden">
+    <div class="uf-login-box">
+      <h2>Crea un account</h2>
+
+      <input type="email" id="register-email" placeholder="Email">
+      <input type="password" id="register-password" placeholder="Password">
+
+      <button class="btn-primary" onclick="register()">Registrati</button>
+
+      <p class="uf-login-switch">
+        Hai già un account?
+        <a href="#" onclick="showLogin()">Accedi</a>
+      </p>
+    </div>
+  </div>
+
   <!-- HEADER -->
   <header class="uf-header">
     <div class="uf-container uf-header-inner">
@@ -31,6 +64,7 @@
         <button type="button" class="btn-mini" onclick="toggleFocus()">Focus</button>
         <button type="button" class="btn-mini" onclick="toggleSidebar()">Stats</button>
         <button type="button" class="btn-mini" onclick="toggleTheme()">Tema</button>
+        <button type="button" class="btn-mini" onclick="logout()">Logout</button>
       </div>
     </div>
   </header>
