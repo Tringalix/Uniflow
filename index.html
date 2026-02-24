@@ -87,13 +87,19 @@
     <div class="uf-container">
       <div class="uf-section-head">
         <h2>Calcolatore Media Universitaria</h2>
-        <p>Inserisci i tuoi esami, i voti e i CFU. La media viene calcolata automaticamente.</p>
+        <p>Inserisci i tuoi esami, i voti e i CFU. La media viene calcolata automaticamente e salvata.</p>
       </div>
 
       <div class="uf-media-box">
         <div id="exam-list" class="uf-exam-list"></div>
 
-        <button class="btn-primary uf-add-exam" onclick="addExam()">+ Aggiungi esame</button>
+        <button type="button" class="btn-primary uf-add-exam" onclick="addExam()">+ Aggiungi esame</button>
+
+        <div class="uf-media-actions">
+          <button type="button" class="btn-mini" onclick="sortByVoto()">Ordina per voto</button>
+          <button type="button" class="btn-mini" onclick="sortByCFU()">Ordina per CFU</button>
+          <button type="button" class="btn-mini" onclick="resetAll()">Reset</button>
+        </div>
 
         <div class="uf-media-result">
           <h3>Media ponderata</h3>
@@ -118,7 +124,7 @@
           <li>Flashcard illimitate</li>
           <li>Zero pubblicità</li>
         </ul>
-      </div>
+</div>
 
       <div class="uf-premium-cta">
         <p>A partire da <strong>4,99€/mese</strong></p>
