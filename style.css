@@ -1,45 +1,38 @@
+/* ============================================
+   UNIFlow – STYLE.CSS (versione completa)
+   Design neon/pastello · Minimal · Moderno
+============================================ */
+
+/* ---------- PALETTE & VARIABILI ---------- */
+
 :root {
   --uf-cyan: #2ee7ff;
   --uf-purple: #7a4bff;
   --uf-pink: #ff3daf;
-  --uf-yellow: #ffe84a;
-  --uf-green-soft: #a8fff0;
-  --uf-blue: #3a6bff;
-  --uf-pink-soft: #ffb7d9;
-
-  --uf-bg: #050510;
-  --uf-bg-alt: #0b0b18;
   --uf-white: #ffffff;
-  --uf-gray-light: #f4f4f7;
   --uf-gray: #c8c8d0;
-  --uf-black-soft: #1a1a1c;
+  --uf-gray-light: #e6e6ef;
 
-  --radius-lg: 18px;
   --radius-md: 12px;
+  --radius-lg: 18px;
   --radius-pill: 999px;
 
-  --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.35);
+  --bg-dark: #050510;
+  --bg-card: rgba(255, 255, 255, 0.05);
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+/* ---------- BASE ---------- */
 
 body {
   margin: 0;
-  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  background: radial-gradient(circle at top, #151530 0, #050510 55%, #020208 100%);
+  font-family: "Inter", sans-serif;
+  background: var(--bg-dark);
   color: var(--uf-white);
 }
 
-/* Layout base */
-
 .uf-container {
-  width: 100%;
-  max-width: 1120px;
-  margin: 0 auto;
+  max-width: 1100px;
+  margin: auto;
   padding: 0 16px;
 }
 
@@ -47,32 +40,31 @@ body {
   padding: 80px 0;
 }
 
-.uf-section-alt {
-  background: rgba(255, 255, 255, 0.02);
+h1, h2, h3 {
+  font-family: "Poppins", sans-serif;
 }
 
-/* Header */
+/* ---------- HEADER ---------- */
 
 .uf-header {
   position: sticky;
   top: 0;
+  backdrop-filter: blur(12px);
+  background: rgba(5, 5, 16, 0.85);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   z-index: 20;
-  backdrop-filter: blur(18px);
-  background: linear-gradient(to bottom, rgba(5, 5, 16, 0.95), rgba(5, 5, 16, 0.7));
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .uf-header-inner {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   padding: 14px 0;
 }
 
 .uf-logo-gradient {
-  font-family: "Poppins", system-ui, sans-serif;
+  font-size: 1.6rem;
   font-weight: 700;
-  font-size: 1.4rem;
   background: linear-gradient(90deg, var(--uf-cyan), var(--uf-purple), var(--uf-pink));
   -webkit-background-clip: text;
   color: transparent;
@@ -80,292 +72,138 @@ body {
 
 .uf-nav {
   display: flex;
-  gap: 18px;
-  font-size: 0.95rem;
+  gap: 20px;
 }
 
 .uf-nav a {
-  color: var(--uf-gray-light);
+  color: var(--uf-gray);
   text-decoration: none;
-  position: relative;
+  font-size: 0.95rem;
 }
 
-.uf-nav a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -4px;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--uf-cyan), var(--uf-pink));
-  transition: width 0.2s ease-out;
+/* ---------- HERO ---------- */
+
+.uf-hero {
+  padding: 100px 0 60px;
 }
 
-.uf-nav a:hover::after {
-  width: 100%;
+.uf-hero-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 40px;
 }
 
-.uf-header-cta {
+.uf-hero-text h1 {
+  font-size: 2.8rem;
+  margin-bottom: 12px;
+}
+
+.uf-hero-text p {
+  color: var(--uf-gray);
+  max-width: 460px;
+}
+
+.uf-hero-cta {
+  margin-top: 20px;
   display: flex;
-  gap: 10px;
+  gap: 12px;
 }
 
-/* Buttons */
+/* ---------- BUTTONS ---------- */
 
 .btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   padding: 10px 20px;
   border-radius: var(--radius-pill);
-  border: none;
-  cursor: pointer;
+  background: linear-gradient(90deg, var(--uf-cyan), var(--uf-purple), var(--uf-pink));
+  color: #000;
   font-family: "Poppins", sans-serif;
   font-weight: 600;
-  font-size: 0.95rem;
-  color: var(--uf-black-soft);
-  background: linear-gradient(120deg, var(--uf-cyan), var(--uf-purple), var(--uf-pink));
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
   text-decoration: none;
-}
-
-.btn-primary:hover {
-  filter: brightness(1.05);
-}
-
-.btn-outline {
-  padding: 9px 18px;
-  border-radius: var(--radius-pill);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  background: transparent;
-  color: var(--uf-white);
-  font-size: 0.9rem;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.btn-outline:hover {
-  background: rgba(255, 255, 255, 0.06);
 }
 
 .btn-ghost {
-  padding: 9px 18px;
+  padding: 10px 20px;
   border-radius: var(--radius-pill);
-  border: none;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.08);
   color: var(--uf-white);
-  font-size: 0.9rem;
-  cursor: pointer;
   text-decoration: none;
 }
 
 .btn-mini {
   padding: 6px 12px;
   border-radius: var(--radius-pill);
-  border: none;
-  font-size: 0.8rem;
   background: rgba(255, 255, 255, 0.08);
-  color: var(--uf-gray-light);
-  cursor: default;
+  color: var(--uf-white);
+  text-decoration: none;
+  font-size: 0.85rem;
 }
 
-.btn-full {
-  width: 100%;
-}
-
-/* Hero */
-
-.uf-hero {
-  padding: 80px 0 60px;
-}
-
-.uf-hero-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
-  gap: 40px;
-  align-items: center;
-}
-
-.uf-hero-text h1 {
-  font-family: "Poppins", sans-serif;
-  font-size: 2.6rem;
-  line-height: 1.1;
-  margin-bottom: 16px;
-}
-
-.uf-hero-text p {
-  font-size: 1rem;
-  color: var(--uf-gray-light);
-  max-width: 460px;
-}
-
-.uf-hero-cta {
-  display: flex;
-  gap: 12px;
-  margin: 22px 0 10px;
-}
-
-.uf-hero-sub {
-  font-size: 0.9rem;
-  color: var(--uf-gray);
-}
-
-.uf-hero-visual {
-  position: relative;
-  min-height: 260px;
-}
-
-.uf-card {
-  background: radial-gradient(circle at top left, rgba(46, 231, 255, 0.18), rgba(10, 10, 25, 0.98));
-  border-radius: var(--radius-lg);
-  padding: 16px 18px;
-  box-shadow: var(--shadow-soft);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.uf-card h3 {
-  margin: 0 0 6px;
-  font-size: 1rem;
-}
-
-.uf-card p {
-  margin: 0;
-  font-size: 0.9rem;
-  color: var(--uf-gray-light);
-}
-
-.uf-card-glow {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 230px;
-}
-
-.uf-card-pill {
-  position: absolute;
-  bottom: 40px;
-  left: 0;
-  width: 260px;
-  background: linear-gradient(120deg, rgba(122, 75, 255, 0.3), rgba(255, 61, 175, 0.2));
-}
-
-.uf-card-pill span {
-  font-size: 0.8rem;
-  color: var(--uf-yellow);
-}
-
-.uf-card-pill strong {
-  display: block;
-  margin-top: 4px;
-  font-size: 0.9rem;
-}
-
-.uf-avatar-badge {
-  position: absolute;
-  bottom: -10px;
-  right: 40px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: rgba(5, 5, 16, 0.9);
-  border-radius: var(--radius-pill);
-  padding: 6px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.uf-avatar-circle {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--uf-cyan), var(--uf-pink));
-}
-
-.uf-avatar-badge span {
-  font-size: 0.8rem;
-  color: var(--uf-gray-light);
-}
-
-/* Section head */
-
-.uf-section-head {
-  text-align: left;
-  margin-bottom: 32px;
-}
-
-.uf-section-head h2 {
-  font-family: "Poppins", sans-serif;
-  font-size: 1.8rem;
-  margin-bottom: 8px;
-}
-
-.uf-section-head p {
-  color: var(--uf-gray-light);
-  max-width: 520px;
-}
-
-/* Grid */
+/* ---------- TOOL GRID ---------- */
 
 .uf-grid {
   display: grid;
-  gap: 18px;
-}
-
-.uf-grid-4 {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
 }
 
 .uf-grid-3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, 1fr);
 }
 
-/* Cards */
-
-.uf-tool-card,
-.uf-test-card,
-.uf-content-card,
-.uf-product-card {
-  background: rgba(10, 10, 25, 0.95);
+.uf-tool-card {
+  background: var(--bg-card);
+  padding: 18px;
   border-radius: var(--radius-md);
-  padding: 16px 16px 18px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.uf-tool-card h3,
-.uf-test-card h3,
-.uf-content-card h3,
-.uf-product-card h3 {
-  font-size: 1rem;
-  margin: 0 0 6px;
+/* ---------- CALCOLATORE MEDIA ---------- */
+
+.uf-media-box {
+  background: var(--bg-card);
+  padding: 28px;
+  border-radius: var(--radius-lg);
 }
 
-.uf-tool-card p,
-.uf-test-card p,
-.uf-content-card p,
-.uf-product-card p {
-  font-size: 0.9rem;
-  color: var(--uf-gray-light);
-  margin: 0 0 10px;
+.uf-exam-list {
+  margin-bottom: 20px;
 }
 
-.uf-test-card {
-  background: radial-gradient(circle at top, rgba(122, 75, 255, 0.35), rgba(10, 10, 25, 0.98));
+.uf-exam-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
-.uf-content-card .tag {
-  display: inline-block;
-  font-size: 0.75rem;
-  padding: 4px 10px;
-  border-radius: var(--radius-pill);
+.uf-exam-row input {
+  flex: 1;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  border: none;
   background: rgba(255, 255, 255, 0.08);
-  margin-bottom: 8px;
+  color: var(--uf-white);
 }
 
-.uf-product-card .price {
-  font-size: 0.9rem;
-  color: var(--uf-yellow);
+.uf-exam-row button {
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 61, 175, 0.3);
+  border: none;
+  color: var(--uf-white);
+  cursor: pointer;
 }
 
-/* Premium */
+.uf-media-result h3 {
+  margin-bottom: 6px;
+}
+
+.uf-media-result p {
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--uf-cyan), var(--uf-purple), var(--uf-pink));
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* ---------- PREMIUM ---------- */
 
 .uf-premium {
   background: radial-gradient(circle at top, rgba(122, 75, 255, 0.4), #050510);
@@ -375,21 +213,11 @@ body {
   display: flex;
   justify-content: space-between;
   gap: 40px;
-  align-items: center;
-}
-
-.uf-premium h2 {
-  font-family: "Poppins", sans-serif;
-  font-size: 1.8rem;
-  margin-bottom: 12px;
 }
 
 .uf-premium-list {
   list-style: none;
   padding: 0;
-  margin: 0;
-  color: var(--uf-gray-light);
-  font-size: 0.95rem;
 }
 
 .uf-premium-list li::before {
@@ -397,112 +225,9 @@ body {
   color: var(--uf-cyan);
 }
 
-.uf-premium-cta {
-  background: rgba(5, 5, 16, 0.9);
-  border-radius: var(--radius-lg);
-  padding: 18px 18px 20px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: var(--shadow-soft);
-}
-
-.uf-premium-cta p {
-  margin: 0 0 10px;
-}
-
-.uf-premium-note {
-  font-size: 0.8rem;
-  color: var(--uf-gray);
-}
-
-/* Footer */
+/* ---------- FOOTER ---------- */
 
 .uf-footer {
+  padding: 40px 0;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 32px 0 26px;
-  background: #050510;
-}
-
-.uf-footer-inner {
-  display: flex;
-  justify-content: space-between;
-  gap: 40px;
-  align-items: flex-start;
-}
-
-.uf-footer-brand p {
-  max-width: 320px;
-  font-size: 0.9rem;
-  color: var(--uf-gray-light);
-}
-
-.uf-footer-links {
-  display: flex;
-  gap: 40px;
-}
-
-.uf-footer-links h4 {
-  margin: 0 0 8px;
-  font-size: 0.9rem;
-}
-
-.uf-footer-links a {
-  display: block;
-  font-size: 0.85rem;
-  color: var(--uf-gray-light);
-  text-decoration: none;
-  margin-bottom: 4px;
-}
-
-.uf-footer-links a:hover {
-  color: var(--uf-cyan);
-}
-
-/* Responsive */
-
-@media (max-width: 900px) {
-  .uf-hero-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .uf-card-glow,
-  .uf-card-pill,
-  .uf-avatar-badge {
-    position: static;
-    margin-top: 12px;
-  }
-
-  .uf-premium-inner {
-    flex-direction: column;
-  }
-
-  .uf-grid-4 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .uf-grid-3 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .uf-header-inner {
-    gap: 12px;
-  }
-
-  .uf-nav {
-    display: none; /* versione base: nav desktop only */
-  }
-}
-
-@media (max-width: 600px) {
-  .uf-grid-4,
-  .uf-grid-3 {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .uf-footer-inner {
-    flex-direction: column;
-  }
-
-  .uf-footer-links {
-    flex-wrap: wrap;
-  }
 }
