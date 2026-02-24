@@ -1,4 +1,3 @@
-<h1 style="color:red;">VERSIONE LIVE</h1>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -12,18 +11,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
-    /* LOGIN OVERLAY SICURO */
+    /* LOGIN POPUP (MODAL C) */
     .uf-login-overlay {
       position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.85);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #111;
+      padding: 30px;
+      border-radius: 14px;
+      width: 320px;
       z-index: 999999;
       opacity: 0;
       pointer-events: none;
       transition: opacity .25s ease;
+      box-shadow: 0 0 40px rgba(0,0,0,0.6);
     }
 
     .uf-visible {
@@ -34,14 +36,6 @@
     .uf-hidden {
       opacity: 0 !important;
       pointer-events: none !important;
-    }
-
-    .uf-login-box {
-      background: #111;
-      padding: 30px;
-      border-radius: 14px;
-      width: 320px;
-      text-align: center;
     }
 
     .uf-login-box input {
@@ -93,40 +87,47 @@
       opacity: 0;
       transition: .2s;
       z-index: 1000000;
+      color: white;
     }
 
     #uf-toast.visible {
       opacity: 1;
+    }
+
+    /* DISABILITA TOOL SE NON LOGGATO */
+    .uf-disabled {
+      opacity: 0.4;
+      pointer-events: none;
     }
   </style>
 </head>
 
 <body class="theme-dark">
 
-  <!-- LOGIN -->
+  <!-- LOGIN POPUP -->
   <div id="uf-login-screen" class="uf-login-overlay uf-visible">
     <div class="uf-login-box">
       <h2>Accedi a UniFlow</h2>
       <input type="email" id="login-email" placeholder="Email">
       <input type="password" id="login-password" placeholder="Password">
-      <button class="btn-primary" onclick="login()">Accedi</button>
+      <button class="btn-primary" onclick="uf_login()">Accedi</button>
       <p class="uf-login-switch">
         Non hai un account?
-        <a onclick="showRegister()">Registrati</a>
+        <a onclick="uf_showRegister()">Registrati</a>
       </p>
     </div>
   </div>
 
-  <!-- REGISTER -->
+  <!-- REGISTER POPUP -->
   <div id="uf-register-screen" class="uf-login-overlay uf-hidden">
     <div class="uf-login-box">
       <h2>Crea un account</h2>
       <input type="email" id="register-email" placeholder="Email">
       <input type="password" id="register-password" placeholder="Password">
-      <button class="btn-primary" onclick="register()">Registrati</button>
+      <button class="btn-primary" onclick="uf_register()">Registrati</button>
       <p class="uf-login-switch">
         Hai già un account?
-        <a onclick="showLogin()">Accedi</a>
+        <a onclick="uf_showLogin()">Accedi</a>
       </p>
     </div>
   </div>
@@ -151,12 +152,13 @@
         <button class="btn-mini" onclick="toggleFocus()">Focus</button>
         <button class="btn-mini" onclick="toggleSidebar()">Stats</button>
         <button class="btn-mini" onclick="toggleTheme()">Tema</button>
-        <button class="btn-mini" onclick="logout()">Logout</button>
+        <button class="btn-mini" onclick="uf_logout()">Logout</button>
       </div>
     </div>
   </header>
 
-  <!-- HERO -->
+<!-- END BLOCCO 1 -->
+    <!-- HERO -->
   <section id="hero" class="uf-hero">
     <div class="uf-container uf-hero-grid">
       <div class="uf-hero-text">
@@ -186,7 +188,7 @@
   </section>
 
   <!-- TOOL GRID -->
-  <section id="tools" class="uf-section">
+  <section id="tools" class="uf-section uf-disabled">
     <div class="uf-container">
       <div class="uf-section-head">
         <h2>Tool UniFlow</h2>
@@ -223,7 +225,7 @@
   </section>
 
   <!-- CALCOLATORE MEDIA -->
-  <section id="media" class="uf-section">
+  <section id="media" class="uf-section uf-disabled">
     <div class="uf-container">
       <div class="uf-section-head">
         <h2>Calcolatore Media</h2>
@@ -231,20 +233,20 @@
 
       <div class="uf-media-box">
         <div class="uf-media-topbar">
-          <button class="btn-mini" onclick="toggleSimulation()">Simulazione</button>
-          <button class="btn-mini" onclick="importCSV()">Importa CSV</button>
-          <button class="btn-mini" onclick="exportJSON()">Backup</button>
-          <button class="btn-mini" onclick="downloadPrint()">PDF</button>
+          <button class="btn-mini">Simulazione</button>
+          <button class="btn-mini">Importa CSV</button>
+          <button class="btn-mini">Backup</button>
+          <button class="btn-mini">PDF</button>
         </div>
 
         <div id="exam-list" class="uf-exam-list"></div>
 
-        <button class="btn-primary uf-add-exam" onclick="addExam()">+ Aggiungi esame</button>
+        <button class="btn-primary uf-add-exam">+ Aggiungi esame</button>
 
         <div class="uf-media-actions">
-          <button class="btn-mini" onclick="sortByVoto()">Ordina per voto</button>
-          <button class="btn-mini" onclick="sortByCFU()">Ordina per CFU</button>
-          <button class="btn-mini" onclick="resetAll()">Reset</button>
+          <button class="btn-mini">Ordina per voto</button>
+          <button class="btn-mini">Ordina per CFU</button>
+          <button class="btn-mini">Reset</button>
         </div>
 
         <div class="uf-media-result">
@@ -264,7 +266,7 @@
   </section>
 
   <!-- LAUREA -->
-  <section id="laurea" class="uf-section">
+  <section id="laurea" class="uf-section uf-disabled">
     <div class="uf-container">
       <div class="uf-section-head">
         <h2>Simulatore Laurea</h2>
@@ -295,7 +297,7 @@
           </div>
         </div>
 
-        <button class="btn-primary" onclick="calculateLaurea()">Calcola</button>
+        <button class="btn-primary">Calcola</button>
 
         <div class="uf-media-result">
           <h3>Voto stimato</h3>
@@ -306,7 +308,7 @@
   </section>
 
   <!-- PLANNER -->
-  <section id="planner" class="uf-section">
+  <section id="planner" class="uf-section uf-disabled">
     <div class="uf-container">
       <div class="uf-section-head">
         <h2>Obiettivi & Simulazioni</h2>
@@ -332,7 +334,7 @@
           </div>
         </div>
 
-        <button class="btn-primary" onclick="calculateTarget()">Calcola</button>
+        <button class="btn-primary">Calcola</button>
 
         <div class="uf-media-result">
           <h3>Media necessaria</h3>
@@ -343,7 +345,7 @@
   </section>
 
   <!-- RIASSUNTI AI -->
-  <section id="riassunti" class="uf-section">
+  <section id="riassunti" class="uf-section uf-disabled">
     <div class="uf-container">
       <div class="uf-section-head">
         <h2>Riassunti AI</h2>
@@ -353,7 +355,7 @@
       <div class="uf-media-box uf-summary-box">
         <textarea id="summary-input" class="uf-textarea" placeholder="Incolla qui il testo da riassumere..."></textarea>
 
-        <button class="btn-primary" onclick="generateSummary()">Genera Riassunto</button>
+        <button class="btn-primary" onclick="uf_generateSummary()">Genera Riassunto</button>
 
         <div id="summary-output" class="uf-summary-output uf-hidden">
           <h3>Riassunto breve</h3>
@@ -372,7 +374,8 @@
     </div>
   </section>
 
-  <!-- SIDEBAR -->
+<!-- END BLOCCO 2 -->
+    <!-- SIDEBAR -->
   <div id="uf-sidebar" class="uf-sidebar">
     <div class="uf-sidebar-inner">
       <h3>Statistiche</h3>
@@ -392,15 +395,18 @@
   <!-- TOAST -->
   <div id="uf-toast"></div>
 
+  <!-- SCRIPT COMPLETO -->
   <script>
-    function toast(msg) {
+    /* TOAST */
+    function uf_toast(msg) {
       const t = document.getElementById("uf-toast");
       t.textContent = msg;
       t.classList.add("visible");
       setTimeout(() => t.classList.remove("visible"), 2000);
     }
 
-    function showLogin() {
+    /* LOGIN POPUP */
+    function uf_showLogin() {
       document.getElementById("uf-login-screen").classList.add("uf-visible");
       document.getElementById("uf-login-screen").classList.remove("uf-hidden");
 
@@ -408,7 +414,7 @@
       document.getElementById("uf-register-screen").classList.remove("uf-visible");
     }
 
-    function showRegister() {
+    function uf_showRegister() {
       document.getElementById("uf-register-screen").classList.add("uf-visible");
       document.getElementById("uf-register-screen").classList.remove("uf-hidden");
 
@@ -416,50 +422,102 @@
       document.getElementById("uf-login-screen").classList.remove("uf-visible");
     }
 
-    function register() {
+    /* REGISTRAZIONE */
+    function uf_register() {
       const email = document.getElementById("register-email").value.trim();
       const pass  = document.getElementById("register-password").value.trim();
 
-      if (!email || !pass) return toast("Compila tutto");
+      if (!email || !pass) return uf_toast("Compila tutto");
 
       const users = JSON.parse(localStorage.getItem("users") || "{}");
 
-      if (users[email]) return toast("Email già registrata");
+      if (users[email]) return uf_toast("Email già registrata");
 
       users[email] = { password: pass };
       localStorage.setItem("users", JSON.stringify(users));
 
-      toast("Registrazione completata");
-      showLogin();
+      uf_toast("Registrazione completata");
+      uf_showLogin();
     }
 
-    function login() {
+    /* LOGIN */
+    function uf_login() {
       const email = document.getElementById("login-email").value.trim();
       const pass  = document.getElementById("login-password").value.trim();
 
       const users = JSON.parse(localStorage.getItem("users") || "{}");
 
       if (!users[email] || users[email].password !== pass)
-        return toast("Credenziali errate");
+        return uf_toast("Credenziali errate");
 
-      toast("Login effettuato");
+      uf_toast("Login effettuato");
 
       document.getElementById("uf-login-screen").classList.add("uf-hidden");
       document.getElementById("uf-login-screen").classList.remove("uf-visible");
 
       document.getElementById("uf-register-screen").classList.add("uf-hidden");
       document.getElementById("uf-register-screen").classList.remove("uf-visible");
+
+      uf_unlockTools();
     }
 
-    function logout() {
-      showLogin();
+    /* LOGOUT */
+    function uf_logout() {
+      uf_showLogin();
+      uf_lockTools();
     }
 
-    function generateSummary() {
+    /* BLOCCA TOOL FINCHÉ NON LOGGATO */
+    function uf_lockTools() {
+      document.querySelectorAll(".uf-section").forEach(sec => {
+        sec.classList.add("uf-disabled");
+      });
+    }
+
+    /* SBLOCCA TOOL DOPO LOGIN */
+    function uf_unlockTools() {
+      document.querySelectorAll(".uf-section").forEach(sec => {
+        sec.classList.remove("uf-disabled");
+      });
+    }
+
+    /* RIASSUNTI AI (VERSIONE OFFLINE) */
+    function uf_generateSummary() {
       const text = document.getElementById("summary-input").value.trim();
-      if (!text) return toast("Incolla un testo da riassumere");
+      if (!text) return uf_toast("Incolla un testo da riassumere");
 
       const short = text.length > 200 ? text.slice(0, 200) + "..." : text;
       const long  = text.length > 600 ? text.slice(0, 600) + "..." : text;
 
-      const sentences
+      const sentences = text.split(".").filter(s => s.trim().length > 0);
+      const points = sentences.slice(0, 5);
+      const questions = sentences.slice(0, 5).map(s => "Cosa significa: " + s.trim() + "?");
+
+      document.getElementById("summary-short").textContent = short;
+      document.getElementById("summary-long").textContent = long;
+
+      const ulPoints = document.getElementById("summary-points");
+      ulPoints.innerHTML = "";
+      points.forEach(p => {
+        const li = document.createElement("li");
+        li.textContent = p.trim();
+        ulPoints.appendChild(li);
+      });
+
+      const ulQ = document.getElementById("summary-questions");
+      ulQ.innerHTML = "";
+      questions.forEach(q => {
+        const li = document.createElement("li");
+        li.textContent = q;
+        ulQ.appendChild(li);
+      });
+
+      document.getElementById("summary-output").classList.remove("uf-hidden");
+    }
+
+    /* BLOCCA TOOL ALL'AVVIO */
+    uf_lockTools();
+  </script>
+
+</body>
+</html>
