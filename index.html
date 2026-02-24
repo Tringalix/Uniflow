@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 </head>
 
-<body>
+<body class="theme-dark">
 
   <!-- HEADER -->
   <header class="uf-header">
@@ -22,9 +22,13 @@
       <nav class="uf-nav">
         <a href="#tools">Tool</a>
         <a href="#media">Calcolatore Media</a>
-        <a href="#tests">Test</a>
+        <a href="#laurea">Voto di laurea</a>
         <a href="#premium">Premium</a>
       </nav>
+
+      <button type="button" class="uf-theme-toggle" onclick="toggleTheme()">
+        Tema
+      </button>
     </div>
   </header>
 
@@ -67,9 +71,9 @@
         </div>
 
         <div class="uf-tool-card">
-          <h3>Piano di Studio</h3>
-          <p>Organizza gli esami in 10 secondi.</p>
-          <button class="btn-mini" disabled>In arrivo</button>
+          <h3>Voto di laurea</h3>
+          <p>Simula il tuo voto finale in 110.</p>
+          <a href="#laurea" class="btn-mini">Apri</a>
         </div>
 
         <div class="uf-tool-card">
@@ -108,6 +112,54 @@
           <h3>Media in 110</h3>
           <p id="media-110">—</p>
         </div>
+
+        <div class="uf-media-progress">
+          <h3>Progressione media</h3>
+          <div id="media-history" class="uf-media-history"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VOTO DI LAUREA -->
+  <section id="laurea" class="uf-section">
+    <div class="uf-container">
+      <div class="uf-section-head">
+        <h2>Simulatore voto di laurea</h2>
+        <p>Parti dalla tua media e aggiungi bonus, tesi e arrotondamenti.</p>
+      </div>
+
+      <div class="uf-media-box uf-laurea-box">
+        <div class="uf-laurea-grid">
+          <div>
+            <label>Media in 110 (auto)</label>
+            <input type="number" id="laurea-media110" placeholder="Es. 102" min="0" max="110">
+          </div>
+          <div>
+            <label>Bonus carriera</label>
+            <input type="number" id="laurea-bonus" placeholder="Es. 3" min="0" max="10">
+          </div>
+          <div>
+            <label>Punteggio tesi</label>
+            <input type="number" id="laurea-tesi" placeholder="Es. 5" min="0" max="10">
+          </div>
+          <div>
+            <label>Arrotondamento</label>
+            <select id="laurea-round">
+              <option value="none">Nessuno</option>
+              <option value="floor">Per difetto</option>
+              <option value="ceil">Per eccesso</option>
+              <option value="nearest">All’intero più vicino</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="button" class="btn-primary" onclick="calculateLaurea()">Calcola voto di laurea</button>
+
+        <div class="uf-media-result">
+          <h3>Voto di laurea stimato</h3>
+          <p id="laurea-result">—</p>
+        </div>
       </div>
     </div>
   </section>
@@ -124,7 +176,7 @@
           <li>Flashcard illimitate</li>
           <li>Zero pubblicità</li>
         </ul>
-</div>
+      </div>
 
       <div class="uf-premium-cta">
         <p>A partire da <strong>4,99€/mese</strong></p>
