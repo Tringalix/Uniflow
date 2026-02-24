@@ -8,54 +8,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-
-  <style>
-    /* LOGIN OVERLAY */
-    .uf-login-screen {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.85);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
-
-    .uf-login-box {
-      background: #111;
-      padding: 30px;
-      border-radius: 14px;
-      width: 320px;
-      text-align: center;
-    }
-
-    .uf-login-box input {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      border-radius: 8px;
-      border: none;
-      background: #222;
-      color: white;
-    }
-
-    .hidden { display: none !important; }
-
-    #uf-toast {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #222;
-      padding: 10px 20px;
-      border-radius: 20px;
-      opacity: 0;
-      transition: .2s;
-      z-index: 10000;
-    }
-
-    #uf-toast.visible { opacity: 1; }
-  </style>
 </head>
 
 <body class="theme-dark">
@@ -100,6 +52,7 @@
         <a href="#media">Media</a>
         <a href="#laurea">Laurea</a>
         <a href="#planner">Obiettivi</a>
+        <a href="#riassunti">Riassunti AI</a>
         <a href="#premium">Premium</a>
       </nav>
 
@@ -166,6 +119,12 @@
           <h3>Obiettivi</h3>
           <p>Media target e simulazioni.</p>
           <a href="#planner" class="btn-mini">Apri</a>
+        </div>
+
+        <div class="uf-tool-card">
+          <h3>Riassunti AI</h3>
+          <p>Incolla il testo e ottieni un riassunto perfetto.</p>
+          <a href="#riassunti" class="btn-mini">Apri</a>
         </div>
 
       </div>
@@ -292,6 +251,36 @@
     </div>
   </section>
 
+  <!-- RIASSUNTI AI -->
+  <section id="riassunti" class="uf-section">
+    <div class="uf-container">
+      <div class="uf-section-head">
+        <h2>Riassunti AI</h2>
+        <p>Incolla il testo e lascia che UniFlow lo sintetizzi per te.</p>
+      </div>
+
+      <div class="uf-media-box uf-summary-box">
+        <textarea id="summary-input" class="uf-textarea" placeholder="Incolla qui il testo da riassumere..."></textarea>
+
+        <button class="btn-primary" onclick="generateSummary()">Genera Riassunto</button>
+
+        <div id="summary-output" class="uf-summary-output hidden">
+          <h3>Riassunto breve</h3>
+          <p id="summary-short">—</p>
+
+          <h3>Riassunto esteso</h3>
+          <p id="summary-long">—</p>
+
+          <h3>Punti chiave</h3>
+          <ul id="summary-points"></ul>
+
+          <h3>Domande per ripassare</h3>
+          <ul id="summary-questions"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- SIDEBAR -->
   <div id="uf-sidebar" class="uf-sidebar">
     <div class="uf-sidebar-inner">
@@ -364,6 +353,40 @@
 
     function logout() {
       showLogin();
+    }
+
+    function generateSummary() {
+      const text = document.getElementById("summary-input").value.trim();
+      if (!text) return toast("Incolla un testo da riassumere");
+
+      const short = text.length > 200 ? text.slice(0, 200) + "..." : text;
+      const long  = text.length > 600 ? text.slice(0, 600) + "..." : text;
+
+      const sentences = text.split(/[.!?]/).filter(s => s.trim().length > 0);
+      const points = sentences.slice(0, 5);
+      const questions = points.map(p => "Cosa significa: " + p.trim() + "?");
+
+      document.getElementById("summary-short").textContent = short;
+      document.getElementById("summary-long").textContent  = long;
+
+      const ulPoints = document.getElementById("summary-points");
+      ulPoints.innerHTML = "";
+      points.forEach(p => {
+        const li = document.createElement("li");
+        li.textContent = p.trim();
+        ulPoints.appendChild(li);
+      });
+
+      const ulQ = document.getElementById("summary-questions");
+      ulQ.innerHTML = "";
+      questions.forEach(q => {
+        const li = document.createElement("li");
+        li.textContent = q;
+        ulQ.appendChild(li);
+      });
+
+      document.getElementById("summary-output").classList.remove("hidden");
+      toast("Riassunto generato");
     }
   </script>
 
