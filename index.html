@@ -1,270 +1,108 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UniFlow – Il tuo flow universitario</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Login Test</title>
+  <style>
+    body { font-family: Arial; background:#0d0d0d; color:white; margin:0; }
+    .screen { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:#000000aa; }
+    .hidden { display:none; }
+    .box { background:#111; padding:25px; border-radius:12px; width:300px; }
+    input { width:100%; padding:10px; margin:8px 0; border-radius:8px; border:none; background:#222; color:white; }
+    button { width:100%; padding:10px; border:none; border-radius:8px; background:#4f46e5; color:white; cursor:pointer; margin-top:10px; }
+    a { color:#8ab4ff; cursor:pointer; }
+    #toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#222; padding:10px 20px; border-radius:20px; opacity:0; transition:.2s; }
+    #toast.visible { opacity:1; }
+  </style>
 </head>
-
-<body class="theme-dark">
+<body>
 
   <!-- LOGIN -->
-  <div id="uf-login-screen" class="uf-login-screen">
-    <div class="uf-login-box">
-      <h2>Accedi a UniFlow</h2>
-      <input type="email" id="login-email" placeholder="Email">
-      <input type="password" id="login-password" placeholder="Password">
-      <button class="btn-primary" onclick="login()">Accedi</button>
-      <p class="uf-login-switch">
+  <div id="login-screen" class="screen">
+    <div class="box">
+      <h2>Accedi</h2>
+      <input id="login-email" type="email" placeholder="Email">
+      <input id="login-password" type="password" placeholder="Password">
+      <button onclick="login()">Accedi</button>
+      <p style="text-align:center;margin-top:10px;">
         Non hai un account?
-        <a href="#" onclick="showRegister()">Registrati</a>
+        <a onclick="showRegister()">Registrati</a>
       </p>
     </div>
   </div>
 
   <!-- REGISTER -->
-  <div id="uf-register-screen" class="uf-login-screen hidden">
-    <div class="uf-login-box">
-      <h2>Crea un account</h2>
-      <input type="email" id="register-email" placeholder="Email">
-      <input type="password" id="register-password" placeholder="Password">
-      <button class="btn-primary" onclick="register()">Registrati</button>
-      <p class="uf-login-switch">
+  <div id="register-screen" class="screen hidden">
+    <div class="box">
+      <h2>Registrati</h2>
+      <input id="register-email" type="email" placeholder="Email">
+      <input id="register-password" type="password" placeholder="Password">
+      <button onclick="register()">Registrati</button>
+      <p style="text-align:center;margin-top:10px;">
         Hai già un account?
-        <a href="#" onclick="showLogin()">Accedi</a>
+        <a onclick="showLogin()">Accedi</a>
       </p>
     </div>
   </div>
 
-  <!-- HEADER -->
-  <header class="uf-header">
-    <div class="uf-container uf-header-inner">
-      <div class="uf-logo">
-        <span class="uf-logo-gradient">UniFlow</span>
-      </div>
+  <div id="toast"></div>
 
-      <nav class="uf-nav">
-        <a href="#tools">Tool</a>
-        <a href="#media">Media</a>
-        <a href="#laurea">Laurea</a>
-        <a href="#planner">Obiettivi</a>
-        <a href="#premium">Premium</a>
-      </nav>
+  <script>
+    function toast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.add("visible");
+      setTimeout(() => t.classList.remove("visible"), 2000);
+    }
 
-      <div class="uf-header-actions">
-        <button class="btn-mini" onclick="toggleFocus()">Focus</button>
-        <button class="btn-mini" onclick="toggleSidebar()">Stats</button>
-        <button class="btn-mini" onclick="toggleTheme()">Tema</button>
-        <button class="btn-mini" onclick="logout()">Logout</button>
-      </div>
-    </div>
-  </header>
+    function showLogin() {
+      document.getElementById("login-screen").classList.remove("hidden");
+      document.getElementById("register-screen").classList.add("hidden");
+    }
 
-  <!-- HERO -->
-  <section id="hero" class="uf-hero">
-    <div class="uf-container uf-hero-grid">
-      <div class="uf-hero-text">
-        <h1>L’università, ma con più flow.</h1>
-        <p>Organizzati meglio, studia più smart e sopravvivi alla sessione con stile.</p>
+    function showRegister() {
+      document.getElementById("login-screen").classList.add("hidden");
+      document.getElementById("register-screen").classList.remove("hidden");
+    }
 
-        <div class="uf-hero-cta">
-          <a href="#tools" class="btn-primary">Scopri i tool</a>
-          <a href="#media" class="btn-ghost">Calcola la tua media</a>
-        </div>
+    function register() {
+      const email = document.getElementById("register-email").value.trim();
+      const pass  = document.getElementById("register-password").value.trim();
 
-        <div class="uf-countdown">
-          <span>Sessione estiva tra:</span>
-          <strong id="session-countdown">—</strong>
-        </div>
+      if (!email || !pass) {
+        toast("Compila tutto");
+        return;
+      }
 
-        <p id="xp-label" class="uf-xp-label">+0 oggi · Inizia a farmare 👀</p>
-      </div>
+      const users = JSON.parse(localStorage.getItem("users") || "{}");
 
-      <div class="uf-hero-visual">
-        <div class="uf-card uf-card-glow">
-          <h3>UniFlow Stats</h3>
-          <p>Livello <span id="uf-level">1</span> · XP <span id="uf-xp-total">0</span></p>
-        </div>
-      </div>
-    </div>
-  </section>
+      if (users[email]) {
+        toast("Email già registrata");
+        return;
+      }
 
-  <!-- TOOL GRID -->
-  <section id="tools" class="uf-section">
-    <div class="uf-container">
-      <div class="uf-section-head">
-        <h2>Tool UniFlow</h2>
-      </div>
+      users[email] = { password: pass };
+      localStorage.setItem("users", JSON.stringify(users));
 
-      <div class="uf-grid uf-grid-3">
+      toast("Registrazione ok");
+      showLogin();
+    }
 
-        <div class="uf-tool-card">
-          <h3>Calcolatore Media</h3>
-          <p>Media ponderata in tempo reale.</p>
-          <a href="#media" class="btn-mini">Apri</a>
-        </div>
+    function login() {
+      const email = document.getElementById("login-email").value.trim();
+      const pass  = document.getElementById("login-password").value.trim();
 
-        <div class="uf-tool-card">
-          <h3>Voto di laurea</h3>
-          <p>Simula il voto finale.</p>
-          <a href="#laurea" class="btn-mini">Apri</a>
-        </div>
+      const users = JSON.parse(localStorage.getItem("users") || "{}");
 
-        <div class="uf-tool-card">
-          <h3>Obiettivi</h3>
-          <p>Media target e simulazioni.</p>
-          <a href="#planner" class="btn-mini">Apri</a>
-        </div>
+      if (!users[email] || users[email].password !== pass) {
+        toast("Credenziali errate");
+        return;
+      }
 
-      </div>
-    </div>
-  </section>
+      toast("Login effettuato");
+      // qui puoi nascondere tutto e mostrare la tua app
+    }
+  </script>
 
-  <!-- CALCOLATORE MEDIA -->
-  <section id="media" class="uf-section">
-    <div class="uf-container">
-      <div class="uf-section-head">
-        <h2>Calcolatore Media</h2>
-      </div>
-
-      <div class="uf-media-box">
-        <div class="uf-media-topbar">
-          <button class="btn-mini" onclick="toggleSimulation()">Simulazione</button>
-          <button class="btn-mini" onclick="importCSV()">Importa CSV</button>
-          <button class="btn-mini" onclick="exportJSON()">Backup</button>
-          <button class="btn-mini" onclick="downloadPrint()">PDF</button>
-        </div>
-
-        <div id="exam-list" class="uf-exam-list"></div>
-
-        <button class="btn-primary uf-add-exam" onclick="addExam()">+ Aggiungi esame</button>
-
-        <div class="uf-media-actions">
-          <button class="btn-mini" onclick="sortByVoto()">Ordina per voto</button>
-          <button class="btn-mini" onclick="sortByCFU()">Ordina per CFU</button>
-          <button class="btn-mini" onclick="resetAll()">Reset</button>
-        </div>
-
-        <div class="uf-media-result">
-          <h3>Media</h3>
-          <p id="media-value">—</p>
-
-          <h3>Media in 110</h3>
-          <p id="media-110">—</p>
-        </div>
-
-        <div class="uf-media-progress">
-          <h3>Progressione</h3>
-          <div id="media-history" class="uf-media-history"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- LAUREA -->
-  <section id="laurea" class="uf-section">
-    <div class="uf-container">
-      <div class="uf-section-head">
-        <h2>Simulatore Laurea</h2>
-      </div>
-
-      <div class="uf-media-box uf-laurea-box">
-        <div class="uf-laurea-grid">
-          <div>
-            <label>Media in 110</label>
-            <input type="number" id="laurea-media110">
-          </div>
-          <div>
-            <label>Bonus</label>
-            <input type="number" id="laurea-bonus">
-          </div>
-          <div>
-            <label>Tesi</label>
-            <input type="number" id="laurea-tesi">
-          </div>
-          <div>
-            <label>Arrotondamento</label>
-            <select id="laurea-round">
-              <option value="none">Nessuno</option>
-              <option value="floor">Per difetto</option>
-              <option value="ceil">Per eccesso</option>
-              <option value="nearest">Vicino</option>
-            </select>
-          </div>
-        </div>
-
-        <button class="btn-primary" onclick="calculateLaurea()">Calcola</button>
-
-        <div class="uf-media-result">
-          <h3>Voto stimato</h3>
-          <p id="laurea-result">—</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PLANNER -->
-  <section id="planner" class="uf-section">
-    <div class="uf-container">
-      <div class="uf-section-head">
-        <h2>Obiettivi & Simulazioni</h2>
-      </div>
-
-      <div class="uf-media-box uf-planner-box">
-        <div class="uf-laurea-grid">
-          <div>
-            <label>Media attuale (110)</label>
-            <input type="number" id="planner-current110">
-          </div>
-          <div>
-            <label>CFU fatti</label>
-            <input type="number" id="planner-cfu-done">
-          </div>
-          <div>
-            <label>CFU mancanti</label>
-            <input type="number" id="planner-cfu-left">
-          </div>
-          <div>
-            <label>Obiettivo (110)</label>
-            <input type="number" id="planner-target110">
-          </div>
-        </div>
-
-        <button class="btn-primary" onclick="calculateTarget()">Calcola</button>
-
-        <div class="uf-media-result">
-          <h3>Media necessaria</h3>
-          <p id="planner-result">—</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SIDEBAR -->
-  <div id="uf-sidebar" class="uf-sidebar">
-    <div class="uf-sidebar-inner">
-      <h3>Statistiche</h3>
-      <p>Livello: <span id="uf-side-level">1</span></p>
-      <p>XP: <span id="uf-side-xp">0</span></p>
-      <p>Media: <span id="uf-side-media">—</span></p>
-      <p>Media 110: <span id="uf-side-media110">—</span></p>
-      <p>Esami: <span id="uf-side-exams">0</span></p>
-
-      <h4>Obiettivi</h4>
-      <ul id="uf-goals"></ul>
-
-      <button class="btn-mini" onclick="toggleSidebar()">Chiudi</button>
-    </div>
-  </div>
-
-  <!-- TOAST -->
-  <div id="uf-toast" class="uf-toast"></div>
-
-  <script src="script.js"></script>
 </body>
 </html>
-         
