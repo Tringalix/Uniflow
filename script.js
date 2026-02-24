@@ -1,5 +1,5 @@
 // ============================================
-// UniFlow – Suite completa
+// UniFlow – Suite completa con login
 // ============================================
 
 console.log("SCRIPT CARICATO ✔️");
@@ -16,6 +16,78 @@ const dailyGoals = [
 
 let goalUpdateCount = 0;
 let goalSortUsed = false;
+
+// ===============================
+// LOGIN SYSTEM (localStorage)
+// ===============================
+function showLogin() {
+  document.getElementById("uf-login-screen").classList.remove("hidden");
+  document.getElementById("uf-register-screen").classList.add("hidden");
+}
+
+function showRegister() {
+  document.getElementById("uf-login-screen").classList.add("hidden");
+  document.getElementById("uf-register-screen").classList.remove("hidden");
+}
+
+function register() {
+  const email = document.getElementById("register-email").value.trim();
+  const pass = document.getElementById("register-password").value.trim();
+
+  if (!email || !pass) {
+    showToast("Compila tutti i campi");
+    return;
+  }
+
+  const users = JSON.parse(localStorage.getItem("uniflow_users") || "{}");
+
+  if (users[email]) {
+    showToast("Email già registrata");
+    return;
+  }
+
+  users[email] = { password: pass };
+  localStorage.setItem("uniflow_users", JSON.stringify(users));
+
+  showToast("Registrazione completata");
+  showLogin();
+}
+
+function login() {
+  const email = document.getElementById("login-email").value.trim();
+  const pass = document.getElementById("login-password").value.trim();
+
+  const users = JSON.parse(localStorage.getItem("uniflow_users") || "{}");
+
+  if (!users[email] || users[email].password !== pass) {
+    showToast("Credenziali errate");
+    return;
+  }
+
+  localStorage.setItem("uniflow_logged", email);
+  hideLoginScreens();
+  showToast("Accesso effettuato");
+}
+
+function logout() {
+  localStorage.removeItem("uniflow_logged");
+  showLogin();
+  showToast("Logout effettuato");
+}
+
+function hideLoginScreens() {
+  document.getElementById("uf-login-screen").classList.add("hidden");
+  document.getElementById("uf-register-screen").classList.add("hidden");
+}
+
+function checkLogin() {
+  const logged = localStorage.getItem("uniflow_logged");
+  if (!logged) {
+    showLogin();
+  } else {
+    hideLoginScreens();
+  }
+}
 
 // -------------------------------
 // Tema chiaro/scuro + dinamico
@@ -120,8 +192,6 @@ function addXP(amount = 10) {
   if (xpEl) xpEl.textContent = totalXP;
   if (sideLevel) sideLevel.textContent = level;
   if (sideXP) sideXP.textContent = totalXP;
-
-  showToast(`+${amount} XP · Livello ${level}`);
 }
 
 // -------------------------------
@@ -274,7 +344,7 @@ function loadData() {
   const xpSaved = Number(localStorage.getItem("uniflow_xp"));
   if (!isNaN(xpSaved) && xpSaved > 0) {
     totalXP = xpSaved;
-    addXP(0); // aggiorna UI senza aggiungere XP
+    addXP(0);
   }
 
   const goalsSaved = JSON.parse(localStorage.getItem("uniflow_goals"));
@@ -627,3 +697,4 @@ function checkGoals() {
 // Avvio
 // -------------------------------
 loadData();
+checkLogin();
