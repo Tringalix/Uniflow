@@ -12,33 +12,33 @@
 
 <body class="theme-dark">
 
-  <!-- LOGIN -->
-  <div id="uf-login-screen" class="uf-login-screen">
-    <div class="uf-login-box">
-      <h2>Accedi a UniFlow</h2>
-      <input type="email" id="login-email" placeholder="Email">
-      <input type="password" id="login-password" placeholder="Password">
-      <button class="btn-primary" onclick="login()">Accedi</button>
-      <p class="uf-login-switch">
-        Non hai un account?
-        <a href="#" onclick="showRegister()">Registrati</a>
-      </p>
-    </div>
+ <!-- LOGIN -->
+<div id="uf-login-screen" class="uf-login-overlay uf-visible">
+  <div class="uf-login-box">
+    <h2>Accedi a UniFlow</h2>
+    <input type="email" id="login-email" placeholder="Email">
+    <input type="password" id="login-password" placeholder="Password">
+    <button class="btn-primary" onclick="login()">Accedi</button>
+    <p class="uf-login-switch">
+      Non hai un account?
+      <a href="#" onclick="showRegister()">Registrati</a>
+    </p>
   </div>
+</div>
 
-  <!-- REGISTER -->
-  <div id="uf-register-screen" class="uf-login-screen hidden">
-    <div class="uf-login-box">
-      <h2>Crea un account</h2>
-      <input type="email" id="register-email" placeholder="Email">
-      <input type="password" id="register-password" placeholder="Password">
-      <button class="btn-primary" onclick="register()">Registrati</button>
-      <p class="uf-login-switch">
-        Hai già un account?
-        <a href="#" onclick="showLogin()">Accedi</a>
-      </p>
-    </div>
+<!-- REGISTER -->
+<div id="uf-register-screen" class="uf-login-overlay uf-hidden">
+  <div class="uf-login-box">
+    <h2>Crea un account</h2>
+    <input type="email" id="register-email" placeholder="Email">
+    <input type="password" id="register-password" placeholder="Password">
+    <button class="btn-primary" onclick="register()">Registrati</button>
+    <p class="uf-login-switch">
+      Hai già un account?
+      <a href="#" onclick="showLogin()">Accedi</a>
+    </p>
   </div>
+</div>
 
   <!-- HEADER -->
   <header class="uf-header">
