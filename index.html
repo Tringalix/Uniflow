@@ -12,16 +12,13 @@
 
 <body class="theme-dark">
 
-  <!-- LOGIN / REGISTER -->
+  <!-- LOGIN -->
   <div id="uf-login-screen" class="uf-login-screen">
     <div class="uf-login-box">
       <h2>Accedi a UniFlow</h2>
-
       <input type="email" id="login-email" placeholder="Email">
       <input type="password" id="login-password" placeholder="Password">
-
       <button class="btn-primary" onclick="login()">Accedi</button>
-
       <p class="uf-login-switch">
         Non hai un account?
         <a href="#" onclick="showRegister()">Registrati</a>
@@ -29,15 +26,13 @@
     </div>
   </div>
 
+  <!-- REGISTER -->
   <div id="uf-register-screen" class="uf-login-screen hidden">
     <div class="uf-login-box">
       <h2>Crea un account</h2>
-
       <input type="email" id="register-email" placeholder="Email">
       <input type="password" id="register-password" placeholder="Password">
-
       <button class="btn-primary" onclick="register()">Registrati</button>
-
       <p class="uf-login-switch">
         Hai già un account?
         <a href="#" onclick="showLogin()">Accedi</a>
@@ -54,17 +49,17 @@
 
       <nav class="uf-nav">
         <a href="#tools">Tool</a>
-        <a href="#media">Calcolatore Media</a>
-        <a href="#laurea">Voto di laurea</a>
+        <a href="#media">Media</a>
+        <a href="#laurea">Laurea</a>
         <a href="#planner">Obiettivi</a>
         <a href="#premium">Premium</a>
       </nav>
 
       <div class="uf-header-actions">
-        <button type="button" class="btn-mini" onclick="toggleFocus()">Focus</button>
-        <button type="button" class="btn-mini" onclick="toggleSidebar()">Stats</button>
-        <button type="button" class="btn-mini" onclick="toggleTheme()">Tema</button>
-        <button type="button" class="btn-mini" onclick="logout()">Logout</button>
+        <button class="btn-mini" onclick="toggleFocus()">Focus</button>
+        <button class="btn-mini" onclick="toggleSidebar()">Stats</button>
+        <button class="btn-mini" onclick="toggleTheme()">Tema</button>
+        <button class="btn-mini" onclick="logout()">Logout</button>
       </div>
     </div>
   </header>
@@ -74,7 +69,7 @@
     <div class="uf-container uf-hero-grid">
       <div class="uf-hero-text">
         <h1>L’università, ma con più flow.</h1>
-        <p>Organizzati meglio, studia più smart e sopravvivi alla sessione con stile, ironia e strumenti virali.</p>
+        <p>Organizzati meglio, studia più smart e sopravvivi alla sessione con stile.</p>
 
         <div class="uf-hero-cta">
           <a href="#tools" class="btn-primary">Scopri i tool</a>
@@ -92,7 +87,7 @@
       <div class="uf-hero-visual">
         <div class="uf-card uf-card-glow">
           <h3>UniFlow Stats</h3>
-          <p>Livello <span id="uf-level">1</span> · XP totali <span id="uf-xp-total">0</span></p>
+          <p>Livello <span id="uf-level">1</span> · XP <span id="uf-xp-total">0</span></p>
         </div>
       </div>
     </div>
@@ -103,26 +98,25 @@
     <div class="uf-container">
       <div class="uf-section-head">
         <h2>Tool UniFlow</h2>
-        <p>Strumenti intelligenti per studenti intelligenti (o quasi).</p>
       </div>
 
       <div class="uf-grid uf-grid-3">
 
         <div class="uf-tool-card">
           <h3>Calcolatore Media</h3>
-          <p>La tua media ponderata in tempo reale.</p>
+          <p>Media ponderata in tempo reale.</p>
           <a href="#media" class="btn-mini">Apri</a>
         </div>
 
         <div class="uf-tool-card">
           <h3>Voto di laurea</h3>
-          <p>Simula il tuo voto finale in 110.</p>
+          <p>Simula il voto finale.</p>
           <a href="#laurea" class="btn-mini">Apri</a>
         </div>
 
         <div class="uf-tool-card">
-          <h3>Obiettivi & Simulazioni</h3>
-          <p>Media target, esami futuri, scenari.</p>
+          <h3>Obiettivi</h3>
+          <p>Media target e simulazioni.</p>
           <a href="#planner" class="btn-mini">Apri</a>
         </div>
 
@@ -134,30 +128,29 @@
   <section id="media" class="uf-section">
     <div class="uf-container">
       <div class="uf-section-head">
-        <h2>Calcolatore Media Universitaria</h2>
-        <p>Inserisci i tuoi esami, i voti e i CFU. La media viene calcolata automaticamente, salvata e puoi simulare scenari.</p>
+        <h2>Calcolatore Media</h2>
       </div>
 
       <div class="uf-media-box">
         <div class="uf-media-topbar">
-          <button type="button" class="btn-mini" onclick="toggleSimulation()">Modalità simulazione</button>
-          <button type="button" class="btn-mini" onclick="importCSV()">Importa CSV</button>
-          <button type="button" class="btn-mini" onclick="exportJSON()">Backup JSON</button>
-          <button type="button" class="btn-mini" onclick="downloadPrint()">Esporta PDF (stampa)</button>
+          <button class="btn-mini" onclick="toggleSimulation()">Simulazione</button>
+          <button class="btn-mini" onclick="importCSV()">Importa CSV</button>
+          <button class="btn-mini" onclick="exportJSON()">Backup</button>
+          <button class="btn-mini" onclick="downloadPrint()">PDF</button>
         </div>
 
         <div id="exam-list" class="uf-exam-list"></div>
 
-        <button type="button" class="btn-primary uf-add-exam" onclick="addExam()">+ Aggiungi esame</button>
+        <button class="btn-primary uf-add-exam" onclick="addExam()">+ Aggiungi esame</button>
 
         <div class="uf-media-actions">
-          <button type="button" class="btn-mini" onclick="sortByVoto()">Ordina per voto</button>
-          <button type="button" class="btn-mini" onclick="sortByCFU()">Ordina per CFU</button>
-          <button type="button" class="btn-mini" onclick="resetAll()">Reset</button>
+          <button class="btn-mini" onclick="sortByVoto()">Ordina per voto</button>
+          <button class="btn-mini" onclick="sortByCFU()">Ordina per CFU</button>
+          <button class="btn-mini" onclick="resetAll()">Reset</button>
         </div>
 
         <div class="uf-media-result">
-          <h3>Media ponderata</h3>
+          <h3>Media</h3>
           <p id="media-value">—</p>
 
           <h3>Media in 110</h3>
@@ -165,34 +158,33 @@
         </div>
 
         <div class="uf-media-progress">
-          <h3>Progressione media</h3>
+          <h3>Progressione</h3>
           <div id="media-history" class="uf-media-history"></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- VOTO DI LAUREA -->
+  <!-- LAUREA -->
   <section id="laurea" class="uf-section">
     <div class="uf-container">
       <div class="uf-section-head">
-        <h2>Simulatore voto di laurea</h2>
-        <p>Parti dalla tua media e aggiungi bonus, tesi e arrotondamenti.</p>
+        <h2>Simulatore Laurea</h2>
       </div>
 
       <div class="uf-media-box uf-laurea-box">
         <div class="uf-laurea-grid">
           <div>
-            <label>Media in 110 (auto/modificabile)</label>
-            <input type="number" id="laurea-media110" placeholder="Es. 102" min="0" max="110">
+            <label>Media in 110</label>
+            <input type="number" id="laurea-media110">
           </div>
           <div>
-            <label>Bonus carriera</label>
-            <input type="number" id="laurea-bonus" placeholder="Es. 3" min="0" max="10">
+            <label>Bonus</label>
+            <input type="number" id="laurea-bonus">
           </div>
           <div>
-            <label>Punteggio tesi</label>
-            <input type="number" id="laurea-tesi" placeholder="Es. 5" min="0" max="10">
+            <label>Tesi</label>
+            <input type="number" id="laurea-tesi">
           </div>
           <div>
             <label>Arrotondamento</label>
@@ -200,104 +192,72 @@
               <option value="none">Nessuno</option>
               <option value="floor">Per difetto</option>
               <option value="ceil">Per eccesso</option>
-              <option value="nearest">All’intero più vicino</option>
+              <option value="nearest">Vicino</option>
             </select>
           </div>
         </div>
 
-        <button type="button" class="btn-primary" onclick="calculateLaurea()">Calcola voto di laurea</button>
+        <button class="btn-primary" onclick="calculateLaurea()">Calcola</button>
 
         <div class="uf-media-result">
-          <h3>Voto di laurea stimato</h3>
+          <h3>Voto stimato</h3>
           <p id="laurea-result">—</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- PLANNER / OBIETTIVI -->
+  <!-- PLANNER -->
   <section id="planner" class="uf-section">
     <div class="uf-container">
       <div class="uf-section-head">
         <h2>Obiettivi & Simulazioni</h2>
-        <p>Imposta una media target e scopri che media ti serve sugli esami rimanenti.</p>
       </div>
 
       <div class="uf-media-box uf-planner-box">
         <div class="uf-laurea-grid">
           <div>
-            <label>Media attuale in 110</label>
-            <input type="number" id="planner-current110" placeholder="Es. 98" min="0" max="110">
+            <label>Media attuale (110)</label>
+            <input type="number" id="planner-current110">
           </div>
           <div>
-            <label>CFU già acquisiti</label>
-            <input type="number" id="planner-cfu-done" placeholder="Es. 120" min="0" max="300">
+            <label>CFU fatti</label>
+            <input type="number" id="planner-cfu-done">
           </div>
           <div>
-            <label>CFU rimanenti</label>
-            <input type="number" id="planner-cfu-left" placeholder="Es. 60" min="0" max="300">
+            <label>CFU mancanti</label>
+            <input type="number" id="planner-cfu-left">
           </div>
           <div>
-            <label>Obiettivo finale in 110</label>
-            <input type="number" id="planner-target110" placeholder="Es. 105" min="0" max="110">
+            <label>Obiettivo (110)</label>
+            <input type="number" id="planner-target110">
           </div>
         </div>
 
-        <button type="button" class="btn-primary" onclick="calculateTarget()">Calcola media necessaria</button>
+        <button class="btn-primary" onclick="calculateTarget()">Calcola</button>
 
         <div class="uf-media-result">
-          <h3>Media necessaria sugli esami rimanenti</h3>
+          <h3>Media necessaria</h3>
           <p id="planner-result">—</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- PREMIUM -->
-  <section id="premium" class="uf-section uf-premium">
-    <div class="uf-container uf-premium-inner">
-      <div>
-        <h2>UniFlow Premium</h2>
-        <p>Livello PRO: quando vuoi smettere di sopravvivere e iniziare a dominare.</p>
-        <ul class="uf-premium-list">
-          <li>Piani di studio personalizzati</li>
-          <li>Risultati avanzati dei test</li>
-          <li>Flashcard illimitate</li>
-          <li>Zero pubblicità</li>
-        </ul>
-      </div>
-
-      <div class="uf-premium-cta">
-        <p>A partire da <strong>4,99€/mese</strong></p>
-        <a href="#" class="btn-primary btn-full">Passa a Premium</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="uf-footer">
-    <div class="uf-container uf-footer-inner">
-      <div class="uf-footer-brand">
-        <span class="uf-logo-gradient">UniFlow</span>
-        <p>Il tuo alleato digitale per sopravvivere all’università con stile.</p>
-      </div>
-    </div>
-  </footer>
-
-  <!-- SIDEBAR STATS -->
+  <!-- SIDEBAR -->
   <div id="uf-sidebar" class="uf-sidebar">
     <div class="uf-sidebar-inner">
-      <h3>Statistiche UniFlow</h3>
-      <p><strong>Livello:</strong> <span id="uf-side-level">1</span></p>
-      <p><strong>XP totale:</strong> <span id="uf-side-xp">0</span></p>
-      <p><strong>Media attuale:</strong> <span id="uf-side-media">—</span></p>
-      <p><strong>Media in 110:</strong> <span id="uf-side-media110">—</span></p>
-      <p><strong>Esami inseriti:</strong> <span id="uf-side-exams">0</span></p>
+      <h3>Statistiche</h3>
+      <p>Livello: <span id="uf-side-level">1</span></p>
+      <p>XP: <span id="uf-side-xp">0</span></p>
+      <p>Media: <span id="uf-side-media">—</span></p>
+      <p>Media 110: <span id="uf-side-media110">—</span></p>
+      <p>Esami: <span id="uf-side-exams">0</span></p>
 
-      <h4>Obiettivi giornalieri</h4>
-      <ul id="uf-goals" class="uf-goals-list"></ul>
+      <h4>Obiettivi</h4>
+      <ul id="uf-goals"></ul>
 
-      <button type="button" class="btn-mini" onclick="toggleSidebar()">Chiudi</button>
+      <button class="btn-mini" onclick="toggleSidebar()">Chiudi</button>
     </div>
   </div>
 
@@ -307,3 +267,4 @@
   <script src="script.js"></script>
 </body>
 </html>
+         
