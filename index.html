@@ -23,12 +23,14 @@
         <a href="#tools">Tool</a>
         <a href="#media">Calcolatore Media</a>
         <a href="#laurea">Voto di laurea</a>
+        <a href="#planner">Obiettivi</a>
         <a href="#premium">Premium</a>
       </nav>
 
-      <button type="button" class="uf-theme-toggle" onclick="toggleTheme()">
-        Tema
-      </button>
+      <div class="uf-header-actions">
+        <button type="button" class="btn-mini" onclick="toggleFocus()">Focus</button>
+        <button type="button" class="btn-mini" onclick="toggleTheme()">Tema</button>
+      </div>
     </div>
   </header>
 
@@ -43,12 +45,17 @@
           <a href="#tools" class="btn-primary">Scopri i tool</a>
           <a href="#media" class="btn-ghost">Calcola la tua media</a>
         </div>
+
+        <div class="uf-countdown">
+          <span>Sessione estiva tra:</span>
+          <strong id="session-countdown">—</strong>
+        </div>
       </div>
 
       <div class="uf-hero-visual">
         <div class="uf-card uf-card-glow">
           <h3>XP Sessione</h3>
-          <p>+120 oggi · Continua così 👀</p>
+          <p id="xp-label">+0 oggi · Inizia a farmare 👀</p>
         </div>
       </div>
     </div>
@@ -77,9 +84,9 @@
         </div>
 
         <div class="uf-tool-card">
-          <h3>Flashcard Automatiche</h3>
-          <p>Studia senza sbatti.</p>
-          <button class="btn-mini" disabled>In arrivo</button>
+          <h3>Obiettivi & Simulazioni</h3>
+          <p>Media target, esami futuri, scenari.</p>
+          <a href="#planner" class="btn-mini">Apri</a>
         </div>
 
       </div>
@@ -91,10 +98,17 @@
     <div class="uf-container">
       <div class="uf-section-head">
         <h2>Calcolatore Media Universitaria</h2>
-        <p>Inserisci i tuoi esami, i voti e i CFU. La media viene calcolata automaticamente e salvata.</p>
+        <p>Inserisci i tuoi esami, i voti e i CFU. La media viene calcolata automaticamente, salvata e puoi simulare scenari.</p>
       </div>
 
       <div class="uf-media-box">
+        <div class="uf-media-topbar">
+          <button type="button" class="btn-mini" onclick="toggleSimulation()">Modalità simulazione</button>
+          <button type="button" class="btn-mini" onclick="importCSV()">Importa CSV</button>
+          <button type="button" class="btn-mini" onclick="exportJSON()">Backup JSON</button>
+          <button type="button" class="btn-mini" onclick="downloadPrint()">Esporta PDF (stampa)</button>
+        </div>
+
         <div id="exam-list" class="uf-exam-list"></div>
 
         <button type="button" class="btn-primary uf-add-exam" onclick="addExam()">+ Aggiungi esame</button>
@@ -164,6 +178,44 @@
     </div>
   </section>
 
+  <!-- PLANNER / OBIETTIVI -->
+  <section id="planner" class="uf-section">
+    <div class="uf-container">
+      <div class="uf-section-head">
+        <h2>Obiettivi & Simulazioni</h2>
+        <p>Imposta una media target e scopri che media ti serve sugli esami rimanenti.</p>
+      </div>
+
+      <div class="uf-media-box uf-planner-box">
+        <div class="uf-laurea-grid">
+          <div>
+            <label>Media attuale in 110</label>
+            <input type="number" id="planner-current110" placeholder="Es. 98" min="0" max="110">
+          </div>
+          <div>
+            <label>CFU già acquisiti</label>
+            <input type="number" id="planner-cfu-done" placeholder="Es. 120" min="0" max="300">
+          </div>
+          <div>
+            <label>CFU rimanenti</label>
+            <input type="number" id="planner-cfu-left" placeholder="Es. 60" min="0" max="300">
+          </div>
+          <div>
+            <label>Obiettivo finale in 110</label>
+            <input type="number" id="planner-target110" placeholder="Es. 105" min="0" max="110">
+          </div>
+        </div>
+
+        <button type="button" class="btn-primary" onclick="calculateTarget()">Calcola media necessaria</button>
+
+        <div class="uf-media-result">
+          <h3>Media necessaria sugli esami rimanenti</h3>
+          <p id="planner-result">—</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- PREMIUM -->
   <section id="premium" class="uf-section uf-premium">
     <div class="uf-container uf-premium-inner">
@@ -194,6 +246,9 @@
       </div>
     </div>
   </footer>
+
+  <!-- TOAST -->
+  <div id="uf-toast" class="uf-toast"></div>
 
   <script src="script.js"></script>
 </body>
