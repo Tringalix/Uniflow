@@ -1,11 +1,21 @@
 // ============================================
-// UniFlow – Super Calcolatore Media
+// UniFlow – Suite completa
 // ============================================
 
 console.log("SCRIPT CARICATO ✔️");
 
 let mediaHistory = [];
 let simulationMode = false;
+let totalXP = 0;
+
+const dailyGoals = [
+  { id: 1, label: "Aggiungi 1 esame", done: false, xp: 10 },
+  { id: 2, label: "Aggiorna la media 3 volte", done: false, xp: 15 },
+  { id: 3, label: "Ordina gli esami almeno una volta", done: false, xp: 5 }
+];
+
+let goalUpdateCount = 0;
+let goalSortUsed = false;
 
 // -------------------------------
 // Tema chiaro/scuro + dinamico
@@ -41,26 +51,37 @@ function toggleFocus() {
 }
 
 // -------------------------------
+// Sidebar
+// -------------------------------
+function toggleSidebar() {
+  const side = document.getElementById("uf-sidebar");
+  if (!side) return;
+  side.classList.toggle("open");
+}
+
+// -------------------------------
 // Countdown sessione
 // -------------------------------
 (function initCountdown() {
   const target = new Date();
-  target.setMonth(5); // giugno (0-based)
+  target.setMonth(5); // giugno
   target.setDate(15);
   target.setHours(9, 0, 0, 0);
 
   function update() {
     const now = new Date();
     let diff = target - now;
+    const el = document.getElementById("session-countdown");
+    if (!el) return;
+
     if (diff <= 0) {
-      document.getElementById("session-countdown").textContent = "È tempo di spaccare in sessione 💥";
+      el.textContent = "È tempo di spaccare in sessione 💥";
       return;
     }
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     diff -= days * 1000 * 60 * 60 * 24;
     const hours = Math.floor(diff / (1000 * 60 * 60));
-    const text = `${days} giorni, ${hours} ore`;
-    document.getElementById("session-countdown").textContent = text;
+    el.textContent = `${days} giorni, ${hours} ore`;
   }
 
   update();
@@ -79,15 +100,28 @@ function showToast(msg) {
 }
 
 // -------------------------------
-// XP label
+// XP / Livelli
 // -------------------------------
 function addXP(amount = 10) {
+  totalXP += amount;
+
   const el = document.getElementById("xp-label");
-  if (!el) return;
-  const match = el.textContent.match(/\+(\d+)/);
-  let current = match ? Number(match[1]) : 0;
-  current += amount;
-  el.textContent = `+${current} oggi · Continua così 👀`;
+  if (el) {
+    el.textContent = `+${totalXP} oggi · Continua così 👀`;
+  }
+
+  const level = Math.floor(totalXP / 50) + 1;
+  const levelEl = document.getElementById("uf-level");
+  const xpEl = document.getElementById("uf-xp-total");
+  const sideLevel = document.getElementById("uf-side-level");
+  const sideXP = document.getElementById("uf-side-xp");
+
+  if (levelEl) levelEl.textContent = level;
+  if (xpEl) xpEl.textContent = totalXP;
+  if (sideLevel) sideLevel.textContent = level;
+  if (sideXP) sideXP.textContent = totalXP;
+
+  showToast(`+${amount} XP · Livello ${level}`);
 }
 
 // -------------------------------
@@ -100,10 +134,11 @@ function toggleSimulation() {
 }
 
 // -------------------------------
-// 1. Aggiungi esame
+// Aggiungi esame
 // -------------------------------
 function addExam(voto = "", crediti = "", simulated = false) {
   const container = document.getElementById("exam-list");
+  if (!container) return;
 
   const row = document.createElement("div");
   row.classList.add("uf-exam-row");
@@ -124,7 +159,7 @@ function addExam(voto = "", crediti = "", simulated = false) {
 }
 
 // -------------------------------
-// 2. Rimuovi esame
+// Rimuovi esame
 // -------------------------------
 function removeExam(button) {
   button.parentElement.remove();
@@ -134,7 +169,7 @@ function removeExam(button) {
 }
 
 // -------------------------------
-// 3. Calcolo media
+// Calcolo media
 // -------------------------------
 document.addEventListener("input", () => {
   calculateMedia();
@@ -160,29 +195,37 @@ function calculateMedia() {
   const media110 = document.getElementById("media-110");
 
   if (totaleCFU === 0) {
-    mediaValue.textContent = "—";
-    media110.textContent = "—";
+    if (mediaValue) mediaValue.textContent = "—";
+    if (media110) media110.textContent = "—";
     updateMediaHistory(null);
     syncLaureaInput(null);
+    updateSidebarStats(null, null, 0);
+    updateStressTheme(null);
     return;
   }
 
   const media = sommaPonderata / totaleCFU;
   const mediaSu110 = (media * 110) / 30;
 
-  mediaValue.textContent = media.toFixed(2);
-  media110.textContent = mediaSu110.toFixed(2);
+  if (mediaValue) mediaValue.textContent = media.toFixed(2);
+  if (media110) media110.textContent = mediaSu110.toFixed(2);
 
   animateMedia();
   updateMediaHistory(media);
   syncLaureaInput(mediaSu110);
+  updateSidebarStats(media, mediaSu110, rows.length);
+  updateStressTheme(media);
+
+  goalUpdateCount++;
+  checkGoals();
 }
 
 // -------------------------------
-// 4. Animazione media
+// Animazione media
 // -------------------------------
 function animateMedia() {
   const el = document.getElementById("media-value");
+  if (!el) return;
   el.style.transition = "0.25s";
   el.style.transform = "scale(1.12)";
   setTimeout(() => {
@@ -191,7 +234,7 @@ function animateMedia() {
 }
 
 // -------------------------------
-// 5. Salvataggio automatico
+// Salvataggio automatico
 // -------------------------------
 function saveData() {
   const rows = [...document.querySelectorAll(".uf-exam-row")];
@@ -203,10 +246,14 @@ function saveData() {
 
   localStorage.setItem("uniflow_esami", JSON.stringify(data));
   localStorage.setItem("uniflow_media_history", JSON.stringify(mediaHistory));
+  localStorage.setItem("uniflow_xp", String(totalXP));
+  localStorage.setItem("uniflow_goals", JSON.stringify(dailyGoals));
+  localStorage.setItem("uniflow_goalUpdateCount", String(goalUpdateCount));
+  localStorage.setItem("uniflow_goalSortUsed", String(goalSortUsed));
 }
 
 // -------------------------------
-// 6. Ripristino automatico
+// Ripristino automatico
 // -------------------------------
 function loadData() {
   const data = JSON.parse(localStorage.getItem("uniflow_esami"));
@@ -223,23 +270,61 @@ function loadData() {
     mediaHistory = history;
     renderMediaHistory();
   }
+
+  const xpSaved = Number(localStorage.getItem("uniflow_xp"));
+  if (!isNaN(xpSaved) && xpSaved > 0) {
+    totalXP = xpSaved;
+    addXP(0); // aggiorna UI senza aggiungere XP
+  }
+
+  const goalsSaved = JSON.parse(localStorage.getItem("uniflow_goals"));
+  if (goalsSaved && Array.isArray(goalsSaved)) {
+    goalsSaved.forEach(g => {
+      const goal = dailyGoals.find(d => d.id === g.id);
+      if (goal) {
+        goal.done = g.done;
+      }
+    });
+  }
+
+  const guc = Number(localStorage.getItem("uniflow_goalUpdateCount"));
+  if (!isNaN(guc)) goalUpdateCount = guc;
+
+  const gsu = localStorage.getItem("uniflow_goalSortUsed");
+  if (gsu === "true") goalSortUsed = true;
+
+  renderGoals();
+  calculateMedia();
 }
 
 // -------------------------------
-// 7. Reset totale
+// Reset totale
 // -------------------------------
 function resetAll() {
-  document.getElementById("exam-list").innerHTML = "";
+  const list = document.getElementById("exam-list");
+  if (list) list.innerHTML = "";
   localStorage.removeItem("uniflow_esami");
   localStorage.removeItem("uniflow_media_history");
+  localStorage.removeItem("uniflow_xp");
+  localStorage.removeItem("uniflow_goals");
+  localStorage.removeItem("uniflow_goalUpdateCount");
+  localStorage.removeItem("uniflow_goalSortUsed");
+
   mediaHistory = [];
+  totalXP = 0;
+  goalUpdateCount = 0;
+  goalSortUsed = false;
+  dailyGoals.forEach(g => (g.done = false));
+
   renderMediaHistory();
+  renderGoals();
+  addXP(0);
   calculateMedia();
   showToast("Tutto resettato");
 }
 
 // -------------------------------
-// 8. Ordinamento
+// Ordinamento
 // -------------------------------
 function sortByVoto() {
   const rows = [...document.querySelectorAll(".uf-exam-row")];
@@ -251,9 +336,12 @@ function sortByVoto() {
   });
 
   const container = document.getElementById("exam-list");
+  if (!container) return;
   container.innerHTML = "";
   rows.forEach(r => container.appendChild(r));
 
+  goalSortUsed = true;
+  checkGoals();
   saveData();
   showToast("Ordinato per voto");
 }
@@ -268,20 +356,21 @@ function sortByCFU() {
   });
 
   const container = document.getElementById("exam-list");
+  if (!container) return;
   container.innerHTML = "";
   rows.forEach(r => container.appendChild(r));
 
+  goalSortUsed = true;
+  checkGoals();
   saveData();
   showToast("Ordinato per CFU");
 }
 
 // -------------------------------
-// 9. Progressione media
+// Progressione media
 // -------------------------------
 function updateMediaHistory(media) {
-  if (media === null) {
-    return;
-  }
+  if (media === null) return;
   mediaHistory.push(Number(media.toFixed(2)));
   if (mediaHistory.length > 20) {
     mediaHistory.shift();
@@ -306,14 +395,13 @@ function renderMediaHistory() {
 }
 
 // -------------------------------
-// 10. Simulatore voto di laurea
+// Simulatore voto di laurea
 // -------------------------------
 function syncLaureaInput(media110) {
   const input = document.getElementById("laurea-media110");
   if (!input) return;
-  if (media110 === null) {
-    input.value = "";
-  } else {
+
+  if (media110 !== null) {
     input.value = media110.toFixed(2);
   }
 }
@@ -357,7 +445,7 @@ function calculateLaurea() {
 }
 
 // -------------------------------
-// 11. Planner: media necessaria
+// Planner: media necessaria
 // -------------------------------
 function calculateTarget() {
   const current110 = Number(document.getElementById("planner-current110").value);
@@ -387,7 +475,7 @@ function calculateTarget() {
 }
 
 // -------------------------------
-// 12. Import CSV
+// Import CSV
 // -------------------------------
 function importCSV() {
   const input = document.createElement("input");
@@ -413,7 +501,9 @@ function parseCSV(text) {
   const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
   if (!lines.length) return;
 
-  document.getElementById("exam-list").innerHTML = "";
+  const list = document.getElementById("exam-list");
+  if (!list) return;
+  list.innerHTML = "";
 
   lines.forEach(line => {
     const parts = line.split(",");
@@ -427,7 +517,7 @@ function parseCSV(text) {
 }
 
 // -------------------------------
-// 13. Export JSON
+// Export JSON
 // -------------------------------
 function exportJSON() {
   const data = localStorage.getItem("uniflow_esami") || "[]";
@@ -444,7 +534,7 @@ function exportJSON() {
 }
 
 // -------------------------------
-// 14. Esporta PDF (stampa)
+// Esporta PDF (stampa)
 // -------------------------------
 function downloadPrint() {
   showToast("Apri la finestra di stampa per salvare in PDF");
@@ -452,6 +542,88 @@ function downloadPrint() {
 }
 
 // -------------------------------
-// 15. Avvio
+// Sidebar stats + tema stress
+// -------------------------------
+function updateSidebarStats(media, media110, examsCount) {
+  const m = document.getElementById("uf-side-media");
+  const m110 = document.getElementById("uf-side-media110");
+  const ex = document.getElementById("uf-side-exams");
+
+  if (!m || !m110 || !ex) return;
+
+  m.textContent = media === null ? "—" : media.toFixed(2);
+  m110.textContent = media110 === null ? "—" : media110.toFixed(2);
+  ex.textContent = examsCount || 0;
+}
+
+function updateStressTheme(media) {
+  document.body.classList.remove("stress-low", "stress-mid", "stress-high");
+
+  if (media === null) return;
+
+  if (media >= 28) {
+    document.body.classList.add("stress-low");
+  } else if (media >= 24) {
+    document.body.classList.add("stress-mid");
+  } else {
+    document.body.classList.add("stress-high");
+  }
+}
+
+// -------------------------------
+// Obiettivi giornalieri
+// -------------------------------
+function renderGoals() {
+  const ul = document.getElementById("uf-goals");
+  if (!ul) return;
+  ul.innerHTML = "";
+
+  dailyGoals.forEach(goal => {
+    const li = document.createElement("li");
+    li.classList.add("uf-goal-item");
+    if (goal.done) li.classList.add("done");
+
+    li.innerHTML = `
+      <label>
+        <input type="checkbox" ${goal.done ? "checked" : ""} onchange="toggleGoal(${goal.id})">
+        ${goal.label} <span class="uf-goal-xp">+${goal.xp} XP</span>
+      </label>
+    `;
+    ul.appendChild(li);
+  });
+}
+
+function toggleGoal(id) {
+  const goal = dailyGoals.find(g => g.id === id);
+  if (!goal) return;
+  if (goal.done) return;
+
+  goal.done = true;
+  addXP(goal.xp);
+  renderGoals();
+  saveData();
+}
+
+function checkGoals() {
+  const g1 = dailyGoals.find(g => g.id === 1);
+  const g2 = dailyGoals.find(g => g.id === 2);
+  const g3 = dailyGoals.find(g => g.id === 3);
+
+  const examsCount = document.querySelectorAll(".uf-exam-row").length;
+  if (g1 && !g1.done && examsCount >= 1) {
+    toggleGoal(1);
+  }
+
+  if (g2 && !g2.done && goalUpdateCount >= 3) {
+    toggleGoal(2);
+  }
+
+  if (g3 && !g3.done && goalSortUsed) {
+    toggleGoal(3);
+  }
+}
+
+// -------------------------------
+// Avvio
 // -------------------------------
 loadData();
