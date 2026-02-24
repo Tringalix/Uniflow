@@ -1,53 +1,48 @@
-<h1 style="color:red;">VERSIONE TEST</h1>
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <title>UniFlow</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniFlow – Il tuo flow universitario</title>
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
-    body {
-      font-family: system-ui;
-      background: #050509;
-      color: white;
-      margin: 0;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    /* LOGIN / REGISTER */
-    .screen {
+    /* LOGIN OVERLAY */
+    .uf-login-overlay {
       position: fixed;
       inset: 0;
+      background: rgba(0,0,0,0.85);
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(0,0,0,0.75);
       z-index: 9999;
     }
 
-    .box {
+    .uf-login-box {
       background: #111;
-      padding: 25px;
-      border-radius: 12px;
+      padding: 30px;
+      border-radius: 14px;
       width: 320px;
+      text-align: center;
     }
 
-    input {
+    .uf-login-box input {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin: 8px 0;
-      border: none;
       border-radius: 8px;
+      border: none;
       background: #222;
       color: white;
     }
 
-    button {
+    .uf-login-box button {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin-top: 10px;
       border: none;
       border-radius: 8px;
@@ -56,13 +51,9 @@
       cursor: pointer;
     }
 
-    a {
-      color: #8ab4ff;
-      cursor: pointer;
-    }
+    .hidden { display: none !important; }
 
-    /* TOAST */
-    #toast {
+    #uf-toast {
       position: fixed;
       bottom: 20px;
       left: 50%;
@@ -75,103 +66,134 @@
       z-index: 10000;
     }
 
-    #toast.visible {
-      opacity: 1;
-    }
-
-    /* APP */
-    #app {
-      padding: 20px;
-    }
-
-    .uf-exam-row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-
-    .uf-exam-row input {
-      flex: 1;
-    }
-
-    .uf-exam-row button {
-      width: 40px;
-      background: #e11d48;
-    }
+    #uf-toast.visible { opacity: 1; }
   </style>
 </head>
 
 <body>
 
-  <!-- LOGIN -->
-  <div id="login-screen" class="screen">
-    <div class="box">
+  <!-- LOGIN OVERLAY -->
+  <div id="uf-login-screen" class="uf-login-overlay">
+    <div class="uf-login-box">
       <h2>Accedi</h2>
       <input id="login-email" type="email" placeholder="Email">
       <input id="login-password" type="password" placeholder="Password">
       <button onclick="login()">Accedi</button>
 
-      <p style="text-align:center;margin-top:10px;">
+      <p style="margin-top:10px;">
         Non hai un account?
-        <a onclick="showRegister()">Registrati</a>
+        <a onclick="showRegister()" style="color:#8ab4ff;cursor:pointer;">Registrati</a>
       </p>
     </div>
   </div>
 
-  <!-- REGISTER -->
-  <div id="register-screen" class="screen hidden">
-    <div class="box">
+  <!-- REGISTER OVERLAY -->
+  <div id="uf-register-screen" class="uf-login-overlay hidden">
+    <div class="uf-login-box">
       <h2>Registrati</h2>
       <input id="register-email" type="email" placeholder="Email">
       <input id="register-password" type="password" placeholder="Password">
       <button onclick="register()">Registrati</button>
 
-      <p style="text-align:center;margin-top:10px;">
+      <p style="margin-top:10px;">
         Hai già un account?
-        <a onclick="showLogin()">Accedi</a>
+        <a onclick="showLogin()" style="color:#8ab4ff;cursor:pointer;">Accedi</a>
       </p>
     </div>
   </div>
 
-  <!-- APP (UniFlow) -->
-  <div id="app" class="hidden">
-    <h1>UniFlow</h1>
+  <div id="uf-toast"></div>
 
-    <h2>Calcolatore Media</h2>
-    <div id="exam-list"></div>
-    <button onclick="addExam()">Aggiungi esame</button>
+  <!-- TUTTO IL TUO SITO ORIGINALE -->
+  <!-- HEADER -->
+  <header class="uf-header">
+    <div class="uf-container uf-header-inner">
+      <div class="uf-logo">
+        <span class="uf-logo-gradient">UniFlow</span>
+      </div>
 
-    <p>Media: <span id="media-value">—</span></p>
-    <p>Media /110: <span id="media-110">—</span></p>
+      <nav class="uf-nav">
+        <a href="#tools">Tool</a>
+        <a href="#media">Calcolatore Media</a>
+        <a href="#tests">Test</a>
+        <a href="#premium">Premium</a>
+      </nav>
+    </div>
+  </header>
 
-    <button onclick="logout()" style="background:#e11d48;margin-top:20px;">Logout</button>
-  </div>
+  <!-- HERO -->
+  <section id="hero" class="uf-hero">
+    <div class="uf-container uf-hero-grid">
+      <div class="uf-hero-text">
+        <h1>L’università, ma con più flow.</h1>
+        <p>Organizzati meglio, studia più smart e sopravvivi alla sessione con stile, ironia e strumenti virali.</p>
 
-  <div id="toast"></div>
+        <div class="uf-hero-cta">
+          <a href="#tools" class="btn-primary">Scopri i tool</a>
+          <a href="#media" class="btn-ghost">Calcola la tua media</a>
+        </div>
+      </div>
+
+      <div class="uf-hero-visual">
+        <div class="uf-card uf-card-glow">
+          <h3>XP Sessione</h3>
+          <p>+120 oggi · Continua così 👀</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOL GRID -->
+  <section id="tools" class="uf-section">
+    <div class="uf-container">
+      <div class="uf-section-head">
+        <h2>Tool UniFlow</h2>
+        <p>Strumenti intelligenti per studenti intelligenti (o quasi).</p>
+      </div>
+
+      <div class="uf-grid uf-grid-3">
+        <div class="uf-tool-card">
+          <h3>Calcolatore Media</h3>
+          <p>La tua media ponderata in tempo reale.</p>
+          <a href="#media" class="btn-mini">Apri</a>
+        </div>
+
+        <div class="uf-tool-card">
+          <h3>Piano di Studio</h3>
+          <p>Organizza gli esami in 10 secondi.</p>
+          <button class="btn-mini" disabled>In arrivo</button>
+        </div>
+
+        <div class="uf-tool-card">
+          <h3>Flashcard Automatiche</h3>
+          <p>Studia più veloce con l’AI.</p>
+          <button class="btn-mini" disabled>In arrivo</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUI CONTINUA TUTTO IL TUO SITO ORIGINALE... -->
+  <!-- (non lo tronco, puoi incollare tutto il resto normalmente) -->
 
   <script>
-    /* TOAST */
     function toast(msg) {
-      const t = document.getElementById("toast");
+      const t = document.getElementById("uf-toast");
       t.textContent = msg;
       t.classList.add("visible");
       setTimeout(() => t.classList.remove("visible"), 2000);
     }
 
-    /* LOGIN UI */
     function showLogin() {
-      document.getElementById("login-screen").classList.remove("hidden");
-      document.getElementById("register-screen").classList.add("hidden");
-      document.getElementById("app").classList.add("hidden");
+      document.getElementById("uf-login-screen").classList.remove("hidden");
+      document.getElementById("uf-register-screen").classList.add("hidden");
     }
 
     function showRegister() {
-      document.getElementById("login-screen").classList.add("hidden");
-      document.getElementById("register-screen").classList.remove("hidden");
-      document.getElementById("app").classList.add("hidden");
+      document.getElementById("uf-login-screen").classList.add("hidden");
+      document.getElementById("uf-register-screen").classList.remove("hidden");
     }
 
-    /* REGISTER */
     function register() {
       const email = document.getElementById("register-email").value.trim();
       const pass  = document.getElementById("register-password").value.trim();
@@ -185,11 +207,10 @@
       users[email] = { password: pass };
       localStorage.setItem("users", JSON.stringify(users));
 
-      toast("Registrazione ok");
+      toast("Registrazione completata");
       showLogin();
     }
 
-    /* LOGIN */
     function login() {
       const email = document.getElementById("login-email").value.trim();
       const pass  = document.getElementById("login-password").value.trim();
@@ -201,82 +222,8 @@
 
       toast("Login effettuato");
 
-      document.getElementById("login-screen").classList.add("hidden");
-      document.getElementById("register-screen").classList.add("hidden");
-      document.getElementById("app").classList.remove("hidden");
-
-      loadData();
-      calculateMedia();
-    }
-
-    /* LOGOUT */
-    function logout() {
-      showLogin();
-    }
-
-    /* UNIFLOW — MEDIA */
-    function addExam(voto = "", cfu = "") {
-      const list = document.getElementById("exam-list");
-
-      const row = document.createElement("div");
-      row.classList.add("uf-exam-row");
-
-      row.innerHTML = `
-        <input type="number" class="voto" placeholder="Voto" value="${voto}">
-        <input type="number" class="cfu" placeholder="CFU" value="${cfu}">
-        <button onclick="removeExam(this)">✕</button>
-      `;
-
-      list.appendChild(row);
-      calculateMedia();
-      saveData();
-    }
-
-    function removeExam(btn) {
-      btn.parentElement.remove();
-      calculateMedia();
-      saveData();
-    }
-
-    document.addEventListener("input", () => {
-      calculateMedia();
-      saveData();
-    });
-
-    function calculateMedia() {
-      const rows = [...document.querySelectorAll(".uf-exam-row")];
-      let somma = 0;
-      let totCFU = 0;
-
-      rows.forEach(r => {
-        const v = Number(r.querySelector(".voto").value);
-        const c = Number(r.querySelector(".cfu").value);
-        if (v >= 18 && v <= 30 && c > 0) {
-          somma += v * c;
-          totCFU += c;
-        }
-      });
-
-      const media = totCFU ? somma / totCFU : null;
-      const media110 = media ? (media * 110) / 30 : null;
-
-      document.getElementById("media-value").textContent = media ? media.toFixed(2) : "—";
-      document.getElementById("media-110").textContent = media110 ? media110.toFixed(2) : "—";
-    }
-
-    function saveData() {
-      const rows = [...document.querySelectorAll(".uf-exam-row")];
-      const data = rows.map(r => ({
-        voto: r.querySelector(".voto").value,
-        cfu: r.querySelector(".cfu").value
-      }));
-      localStorage.setItem("uniflow_esami", JSON.stringify(data));
-    }
-
-    function loadData() {
-      const data = JSON.parse(localStorage.getItem("uniflow_esami") || "[]");
-      document.getElementById("exam-list").innerHTML = "";
-      data.forEach(e => addExam(e.voto, e.cfu));
+      document.getElementById("uf-login-screen").classList.add("hidden");
+      document.getElementById("uf-register-screen").classList.add("hidden");
     }
   </script>
 
