@@ -177,3 +177,34 @@ function uf_toast(msg) {
    AVVIO
 --------------------------------*/
 console.log("UniFlow script.js caricato correttamente.");
+
+/* ------------------------------
+   PREMIUM CHECK
+--------------------------------*/
+function uf_isPremium() {
+  return localStorage.getItem("uf_premium") === "true";
+}
+
+function uf_applyPremium() {
+  if (!uf_isPremium()) return;
+
+  document.body.classList.add("uf-premium");
+
+  // Badge Premium
+  const header = document.querySelector(".uf-header-actions");
+  if (header && !document.getElementById("uf-premium-badge")) {
+    const badge = document.createElement("span");
+    badge.id = "uf-premium-badge";
+    badge.textContent = "⭐ Premium";
+    badge.style.marginLeft = "10px";
+    badge.style.color = "gold";
+    header.appendChild(badge);
+  }
+
+  // XP Boost
+  window.uf_xpBoost = 1.2;
+}
+
+(function(){
+  uf_applyPremium();
+})();
