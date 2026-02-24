@@ -119,7 +119,11 @@ function toggleTheme() {
 // -------------------------------
 function toggleFocus() {
   document.body.classList.toggle("focus-mode");
-  showToast(document.body.classList.contains("focus-mode") ? "Modalità focus attiva" : "Modalità focus disattivata");
+  showToast(
+    document.body.classList.contains("focus-mode")
+      ? "Modalità focus attiva"
+      : "Modalità focus disattivata"
+  );
 }
 
 // -------------------------------
@@ -200,7 +204,11 @@ function addXP(amount = 10) {
 function toggleSimulation() {
   simulationMode = !simulationMode;
   document.body.classList.toggle("simulation-mode", simulationMode);
-  showToast(simulationMode ? "Modalità simulazione attiva" : "Modalità simulazione disattivata");
+  showToast(
+    simulationMode
+      ? "Modalità simulazione attiva"
+      : "Modalità simulazione disattivata"
+  );
 }
 
 // -------------------------------
@@ -518,10 +526,14 @@ function calculateLaurea() {
 // Planner: media necessaria
 // -------------------------------
 function calculateTarget() {
-  const current110 = Number(document.getElementById("planner-current110").value);
+  const current110 = Number(
+    document.getElementById("planner-current110").value
+  );
   const cfuDone = Number(document.getElementById("planner-cfu-done").value);
   const cfuLeft = Number(document.getElementById("planner-cfu-left").value);
-  const target110 = Number(document.getElementById("planner-target110").value);
+  const target110 = Number(
+    document.getElementById("planner-target110").value
+  );
   const resultEl = document.getElementById("planner-result");
 
   if (!current110 || !cfuDone || !cfuLeft || !target110) {
